@@ -270,6 +270,7 @@ function pintarDatos(arrayOperaciones) {
     }
 
 
+    const 
     actualizarBalance(arrayOperaciones);
 }
 
