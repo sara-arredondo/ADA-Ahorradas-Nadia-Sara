@@ -1,3 +1,40 @@
+import funciones from "./funciones.js";
+
+// ---------------------------------------------funciones selectoras de HTML  ---------------------------------------------------
+
+function $(element) {
+    return document.querySelector(element)
+}
+
+function $$(element) {
+    return document.querySelectorAll(element)
+}
+
+// --------------------------------------------- selectores de HTML  ---------------------------------------------------
+
+const $balanceButton = $("#balance-button");
+const $categoriaButton = $("#categoria-button");
+const $reporteButton = $("#reporte-button");
+const $agregarOperacionButton = $("#agregrar-operacion-componente-button")
+const $ocultarFiltros = $("#ocultar-filtros")
+
+// seleccion de componentes
+const $balanceComponente = $("#balance-componente");
+const $agregarOperacionComponente = $("#agregar-operacion-componente");
+const $categoriaComponente = $("#categoria-componente");
+const $reporteComponente = $("#reporte-componente");
+const $formFiltros = $("#form-filtros")
+
+const $menuIconMobile = $("#menu-icon-mobile");
+const $containerButtonsMenu = $("#container-menu-buttons");
+
+const $formCreate = $("#form-create")
+const $buttonCancelarOperacion = $("#button-cancelar-operacion")
+
+const $listOperaciones = $("#list-operaciones");
+
+const $contenedorFilterCategory =$("#contenedor-filter-categoria")
+
 const $inputFilterType = $("#filter-type")
 const $inputFilterCategory = $("#filter-category")
 const $inputFilterDate = $("#filter-date")
@@ -45,6 +82,17 @@ $agregarOperacionButton.addEventListener("click", () => {
     $reporteComponente.classList.add("hidden");
 })
 
+//Boton para cancelar la creacion de una nueva operacion redirge a panel balance
+$buttonCancelarOperacion.addEventListener("click", (event) => {
+    preventDefault(event);
+
+    $agregarOperacionComponente.classList.add("hidden");
+
+    $balanceComponente.classList.remove("hidden");
+    $balanceComponente.classList.add("flex");
+
+
+});
 
 //Boton categoria
 $categoriaButton.addEventListener("click", () => {
@@ -213,8 +261,8 @@ function pintarDatos(arrayOperaciones) {
                         <span class="hidden w-1/3 lg:flex justify-end ">${operacion.date}</span>
                         <span class="w-1/3  font-bold flex lg:justify-end xl:justify-end md:justify-start ${colorMonto}">${signoMonto}${operacion.quantity}</span>
                         <div class="w-1/3 flex justify-end space-x-2">
-                            <button class="text-blue-600 hover:underline">Editar</button>
-                            <button class="text-blue-600 hover:underline">Eliminar</button>
+                            <button id=${operacion.id} class="text-blue-600 hover:underline">Editar</button>
+                            <button id=${operacion.id} class="text-blue-600 hover:underline">Eliminar</button>
                         </div>
                     </div>
                 </div>
