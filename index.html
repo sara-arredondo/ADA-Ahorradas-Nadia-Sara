@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ahorradas</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/customParseFormat.js"></script>
+    <script>
+        dayjs.extend(dayjs_plugin_customParseFormat);
+    </script>
     <script>
         tailwind.config = {
           theme: {
@@ -69,19 +74,19 @@
                    <!-- ganancia -->
                    <div class="flex justify-between h-1/3 pb-4">
                        <h3 class="text-lg">Ganancias</h3>
-                       <span class="text-lg">+$xxxx</span>
+                       <span id="balance-ganancia" class="text-lg font-bold text-green-500"></span>
                    </div>
    
                    <!-- gasto -->
                    <div  class="flex justify-between h-1/3 pb-4">
                        <h3 class="text-lg">Gastos</h3>
-                       <span class="text-lg">-$xxxx</span>
+                       <span id="balance-gasto" class="text-lg font-bold text-red-500"></span>
                    </div>
    
                    <!-- total -->
                    <div  class="flex justify-between h-1/3">
                        <h2 class="text-xl">TOTAL</h3>
-                       <span class="text-lg">-$xxxx</span>
+                       <span id="balance-total" class="text-lg font-bold"></span>
                    </div>
    
                 </section>
@@ -104,43 +109,43 @@
                        <!-- input desplegable por tipo -->
                        <div class="flex flex-col mb-4">
                            <label class="mb-2" for="">Tipo</label>
-                           <select class="h-10 rounded-lg border-rojo border px-4" name="" id="">
-                               <option value="todos">Todos</option>
-                               <option value="gasto">Gasto</option>
-                               <option value="ganancia">Ganancia</option>
+                           <select id="filter-type" class="h-10 rounded-lg border-rojo border px-4" name="">
+                               <option value="Todos">Todos</option>
+                               <option value="Gasto">Gasto</option>
+                               <option value="Ganancia">Ganancia</option>
                            </select>
                        </div>
    
                        <!-- input desplegable por categoria -->
-                       <div class="flex flex-col mb-4">
+                       <div  class="flex flex-col mb-4">
                            <label class="mb-2" for="">Categoria</label>
-                           <select class="h-10 rounded-lg border-rojo border px-4" name="" id="">
-                               <option value="todos">Todos</option>
-                               <option value="comida">Comida</option>
-                               <option value="servicios">Servicios</option>
-                               <option value="salidas">Salidas</option>
-                               <option value="educacion">Educacion</option>
-                               <option value="transporte">Transporte</option>
-                               <option value="trabajo">Trabajo</option>
+                           <select id="filter-category" class="h-10 rounded-lg border-rojo border px-4" name="" id="">
+                               <option value="Todos">Todos</option>
+                               <option value="Comida">Comida</option>
+                               <option value="Servicios">Servicios</option>
+                               <option value="Salidas">Salidas</option>
+                               <option value="Educación">Educación</option>
+                               <option value="Transporte">Transporte</option>
+                               <option value="Trabajo">Trabajo</option>
                            </select>
                        </div>
    
                        <!-- input tipo date -->
                        <div class="flex flex-col mb-4">
                            <label class="mb-2" for="">Desde</label>
-                           <input class="h-10 rounded-lg border-rojo border px-4" type="date">
+                           <input id="filter-date" class="h-10 rounded-lg border-rojo border px-4" type="date">
                        </div>
    
                        <!--input para ordenar -->
                        <div class="flex flex-col mb-4" >
                            <label class="mb-2" for="">Ordenar por</label>
-                           <select class="h-10 rounded-lg border-rojo border px-4" name="" id="">
+                           <select id="filter-sort" class="h-10 rounded-lg border-rojo border px-4" name="" id="">
                                <option value="mas-reciente">Más reciente</option>
                                <option value="menos-reciente">Menos reciente</option>
-                               <option value="mayor-monto">Mayor Monto</option>
-                               <option value="menor-mont">Menor Monto</option>
-                               <option value="descendiente">A/Z</option>
-                               <option value="ascendente">Z/A</option>
+                               <option value="mayor-monto">Mayor monto</option>
+                               <option value="menor-monto">Menor monto</option>
+                               <option value="ascendente">A/Z</option>
+                               <option value="descendente">Z/A</option>
                            </select>
                        </div>
                        
@@ -159,7 +164,7 @@
                 </div>
 
                 <!-- planel cuando no hay operaciones -->
-                <div class="h-fit ">
+                <div class="h-fit hidden">
                     <div class="h-72 lg:h-96 flex justify-center mb-8">
                         <img class="h-full" src="./assets/svg/no-hay-operaciones.svg" alt="">
                     </div>
@@ -170,35 +175,21 @@
                 </div>
 
                 <!-- panel cuando hay operaciones operaciones -->
-                <div class="hidden">
+                <div class="flex lg:flex-col xl:flex-col">
 
                     <!-- titúlos tabla -->
-                    <div class="hidden">
-                        <span>Descripción</span>
-                        <span>Categoria</span>
-                        <span>Fecha</span>
-                        <span>Monto</span>
-                        <span>Acciones</span>
+                    <div class="hidden lg:flex text-lg font-bold">
+                        <span class="w-1/5">Descripción</span>
+                        <span class="w-1/5 flex justify-end">Categoría</span>
+                        <span class="w-1/5 flex justify-end">Fecha</span>
+                        <span class="w-1/5 flex justify-end">Monto</span>
+                        <span class="w-1/5 flex justify-end">Acciones</span>
                     </div>
 
                     <!-- fila de operación agregada -->
-                    <div>
+                    <div id="list-operaciones" class="w-full flex flex-col mt-6">
 
-                        <div class="flex justify-between mb-2">
-                            <span class="text-lg font-bold">Descripción</span>
-                            <span class="border border-azul p-2 rounded-full text-xs">Categoria</span>
-                        </div>
                         
-                        <div class="flex justify-between" >
-                            <span class="hidden">Fecha</span>
-                            <span class="text-lg">Monto</span>
-
-                            <div class="gap-4">
-                                <a href="">agregar</a>
-                                <a href="">eliminar</a>
-                            </div>
-                        </div>
-
                     </div>
                     
                 </div>
@@ -216,24 +207,24 @@
                 </div>
                 
                 <!-- formulario para agregar operaciones -->
-                <form action="">
+                <form id="form-create" action="">
 
                     <!-- input para describir el tipo de operacion -->
                     <div class="flex flex-col mb-4">
                         <label class="mb-2" for="">Descripción</label>
-                        <input  type="text" class="h-10 rounded-lg border-rojo border px-4">
+                        <input id="name-operation" type="text" class="h-10 rounded-lg border-rojo border px-4">
                     </div>
 
                     <!-- input para ingresar el monto -->
                     <div class="flex flex-col mb-4">
                         <label class="mb-2" for="">Monto</label>
-                        <input type="number" class="h-10 rounded-lg border-rojo border px-4">
+                        <input id="quantity-operation" type="number" class="h-10 rounded-lg border-rojo border px-4">
                     </div>
 
                     <!-- input para seleccionar el tipo de gasto -->
                     <div class="flex flex-col mb-4">
                         <label class="mb-2" for="">Tipo</label>
-                        <select name="" id="" class="h-10 rounded-lg border-rojo border px-4">
+                        <select name="" id="type-operation" class="h-10 rounded-lg border-rojo border px-4">
                             <option value="Gasto">Gasto</option>
                             <option value="Ganancia">Ganancia</option>
                         </select>
@@ -242,26 +233,26 @@
                     <!-- input para seleccionar la categoria del gasto -->
                     <div class="flex flex-col mb-4">
                         <label class="mb-2" for="">Categoria</label>
-                        <select name="" id="" class="h-10 rounded-lg border-rojo border px-4">
-                            <option value="comida">Comida</option>
-                            <option value="servicios">Servicios</option>
-                            <option value="educacion">Educación</option>
-                            <option value="transporte">Transporte</option>
-                            <option value="trabajo">Trabajo</option>
-                            <option value="zapatos">Zapatos</option>
+                        <select name="" id="category-operation" class="h-10 rounded-lg border-rojo border px-4">
+                            <option value="Comida">Comida</option>
+                            <option value="Servicios">Servicios</option>
+                            <option value="Salidas">Salidas</option>
+                            <option value="Educación">Educación</option>
+                            <option value="Transporte">Transporte</option>
+                            <option value="Trabajo">Trabajo</option>
                         </select>
                     </div>
 
                     <!-- input para ingresar la fecha-->
                     <div class="flex flex-col mb-4">
                         <label class="mb-2" for="">Fecha</label>
-                        <input type="date" class="h-10 rounded-lg border-rojo border px-4">
+                        <input id="create-date" type="date" class="h-10 rounded-lg border-rojo border px-4">
                     </div>
 
                     <!-- input botones-->
                     <div class="flex mt-8 gap-4 justify-end">
-                        <input type="submit" value="enviar" class='py-2.5 px-6 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500  hover:bg-rojo'>
-                        <input type="submit" value="cancelar" class='py-2.5 px-6 text-sm bg-rojo text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-azul'>
+                        <button id="button-enviar-operacion" type="submit" class='py-2.5 px-6 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500  hover:bg-rojo'>enviar</button>
+                        <button id="button-cancelar-operacion" type="submit"  class='py-2.5 px-6 text-sm bg-rojo text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-azul'>cancelar</button>
                     </div>
 
                 </form>
@@ -519,11 +510,10 @@
                 
             </section>
            
-            
         </section>
 
     </main>
     
-    <script src="./main.js"></script>
+    <script type="module" src="./main.js"></script>
 </body>
 </html>
