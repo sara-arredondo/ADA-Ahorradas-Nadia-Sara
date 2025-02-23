@@ -17,6 +17,12 @@ function agregarOperacion(objetoNuevaOperacion) {
     guardarLocalStorage("operaciones", datosTodasLasOperaciones)
 }
 
+function eliminarOperacion(idOperacion) {
+    datosTodasLasOperaciones = datosTodasLasOperaciones.filter(operacion => operacion.id !== idOperacion);
+    console.log("perroo")
+    guardarLocalStorage("operaciones", datosTodasLasOperaciones);
+}
+
 // ---------------------------------------------inicio funcion para exportar datos ---------------------------------------------------
 
 
@@ -24,6 +30,7 @@ export default {
     leerLocalStorage,
     guardarLocalStorage,
     agregarOperacion,
+    eliminarOperacion,
     datosTodasLasOperaciones,
 }
 
