@@ -278,7 +278,7 @@ function pintarDatos(arrayOperaciones) {
                         <span class="hidden w-1/3 lg:flex justify-end ">${operacion.date}</span>
                         <span class="w-1/3  font-bold flex lg:justify-end xl:justify-end md:justify-start ${colorMonto}">${signoMonto}${operacion.quantity}</span>
                         <div class="w-1/3 flex justify-end space-x-2">
-                            <button  class="button-edit text-blue-600 hover:underline">Editar</button>
+                            <button id=${operacion.id} class="button-edit text-blue-600 hover:underline">Editar</button>
                             <button id=${operacion.id} class="button-delete text-blue-600 hover:underline">Eliminar</button>
                         </div>
                     </div>
@@ -301,6 +301,18 @@ function pintarDatos(arrayOperaciones) {
         });
     });
 
+    $$arrayButtonsEdit.forEach(button => {
+        button.addEventListener("click", (event)=> {
+            console.log("chauuuuuu")
+            $balanceComponente.classList.remove("flex")
+            $balanceComponente.classList.add("hidden")
+            
+
+            $formEdit.classList.remove("hidden")
+            $formEdit.classList.remove("hidden")
+
+        })
+    })
 
 
     actualizarBalance(arrayOperaciones);
