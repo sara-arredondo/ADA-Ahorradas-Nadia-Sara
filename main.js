@@ -29,6 +29,7 @@ const $menuIconMobile = $("#menu-icon-mobile");
 const $containerButtonsMenu = $("#container-menu-buttons");
 
 const $formCreate = $("#form-create")
+const $formEdit = $("#form-edit")
 const $buttonCancelarOperacion = $("#button-cancelar-operacion")
 
 const $listOperaciones = $("#list-operaciones");
@@ -246,6 +247,8 @@ function pintarDatos(arrayOperaciones) {
 
     $listOperaciones.innerHTML = "";
 
+    actualizarBalance(arrayOperaciones);
+
     if (arrayOperaciones.length === 0) {
         $panelSinOperaciones.classList.remove("hidden");
         $panelConOperaciones.classList.add("hidden");
@@ -275,7 +278,7 @@ function pintarDatos(arrayOperaciones) {
                         <span class="hidden w-1/3 lg:flex justify-end ">${operacion.date}</span>
                         <span class="w-1/3  font-bold flex lg:justify-end xl:justify-end md:justify-start ${colorMonto}">${signoMonto}${operacion.quantity}</span>
                         <div class="w-1/3 flex justify-end space-x-2">
-                            <button class="button-edit text-blue-600 hover:underline">Editar</button>
+                            <button  class="button-edit text-blue-600 hover:underline">Editar</button>
                             <button id=${operacion.id} class="button-delete text-blue-600 hover:underline">Eliminar</button>
                         </div>
                     </div>
@@ -297,6 +300,8 @@ function pintarDatos(arrayOperaciones) {
             pintarDatos(operacionesActualizadas);
         });
     });
+
+
 
     actualizarBalance(arrayOperaciones);
 }
