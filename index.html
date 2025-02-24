@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -273,19 +273,19 @@
                 <!-- input para describir el tipo de operacion -->
                 <div class="flex flex-col mb-4">
                     <label class="mb-2" for="">Descripción</label>
-                    <input  type="text" class="h-10 rounded-lg border-rojo border px-4">
+                    <input id="name-edit" type="text" class="h-10 rounded-lg border-rojo border px-4">
                 </div>
 
                 <!-- input para ingresar el monto -->
                 <div class="flex flex-col mb-4">
                     <label class="mb-2" for="">Monto</label>
-                    <input type="number" class="h-10 rounded-lg border-rojo border px-4">
+                    <input id="monto-edit" type="number" class="h-10 rounded-lg border-rojo border px-4">
                 </div>
 
                 <!-- input para seleccionar el tipo de gasto -->
                 <div class="flex flex-col mb-4">
                     <label class="mb-2" for="">Tipo</label>
-                    <select name="" id="" class="h-10 rounded-lg border-rojo border px-4">
+                    <select name="" id="type-edit" class="h-10 rounded-lg border-rojo border px-4">
                         <option value="Gasto">Gasto</option>
                         <option value="Ganancia">Ganancia</option>
                     </select>
@@ -294,26 +294,26 @@
                 <!-- input para seleccionar la categoria del gasto -->
                 <div class="flex flex-col mb-4">
                     <label class="mb-2" for="">Categoria</label>
-                    <select name="" id="" class="h-10 rounded-lg border-rojo border px-4">
-                        <option value="comida">Comida</option>
-                        <option value="servicios">Servicios</option>
-                        <option value="educacion">Educación</option>
-                        <option value="transporte">Transporte</option>
-                        <option value="trabajo">Trabajo</option>
-                        <option value="zapatos">Zapatos</option>
+                    <select name="" id="category-edit" class="h-10 rounded-lg border-rojo border px-4">
+                        <option value="Comida">Comida</option>
+                        <option value="Servicios">Servicios</option>
+                        <option value="Educacion">Educación</option>
+                        <option value="Transporte">Transporte</option>
+                        <option value="Trabajo">Trabajo</option>
+                        <option value="Zapatos">Zapatos</option>
                     </select>
                 </div>
 
                 <!-- input para ingresar la fecha-->
                 <div class="flex flex-col mb-4">
                     <label class="mb-2" for="">Fecha</label>
-                    <input type="date" class="h-10 rounded-lg border-rojo border px-4">
+                    <input id="date-edit" type="date" class="h-10 rounded-lg border-rojo border px-4">
                 </div>
 
                 <!-- input botones-->
                 <div class="flex mt-8 gap-4 justify-end">
-                    <input type="submit" value="enviar" class='py-2.5 px-6 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500  hover:bg-rojo'>
-                    <input type="submit" value="cancelar" class='py-2.5 px-6 text-sm bg-rojo text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-azul'>
+                    <input id="submit-edit" type="submit" value="enviar" class='py-2.5 px-6 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500  hover:bg-rojo'>
+                    <input id="cancelar-edit" type="button" value="cancelar" class='py-2.5 px-6 text-sm bg-rojo text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-azul'>
                 </div>
 
             </form>

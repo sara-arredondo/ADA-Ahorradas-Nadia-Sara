@@ -29,8 +29,13 @@ const $menuIconMobile = $("#menu-icon-mobile");
 const $containerButtonsMenu = $("#container-menu-buttons");
 
 const $formCreate = $("#form-create")
-const $formEdit = $("#form-edit")
 const $buttonCancelarOperacion = $("#button-cancelar-operacion")
+
+const $inputFormEdit = $("#form-edit")
+const $inputNameEdit = $("#name-edit")
+const $inputMontoEdit = $("#monto-edit")
+const $inputTypeEdit = $("#type-edit")
+const $inputDateEdit = $("#date-edit")
 
 const $listOperaciones = $("#list-operaciones");
 
@@ -40,6 +45,7 @@ const $inputFilterType = $("#filter-type")
 const $inputFilterCategory = $("#filter-category")
 const $inputFilterDate = $("#filter-date")
 const $inputFilterSort = $("#filter-sort")
+
 
 const $balanceGanancia = $("#balance-ganancia")
 const $balanceGasto = $("#balance-gasto")
@@ -290,30 +296,44 @@ function pintarDatos(arrayOperaciones) {
     const $$arrayButtonsEdit = $$(".button-edit")
     const $$arraybuttonsDelete = $$(".button-delete")
 
-    $$arraybuttonsDelete.forEach(button => {
-        button.addEventListener("click", (event) => {
-            console.log("holaaaaaa")
-            const idEliminar = event.target.id;
-            funciones.eliminarOperacion(idEliminar); 
 
-            const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
-            pintarDatos(operacionesActualizadas);
+    function editarEliminarOperaciones() {
+        $$arraybuttonsDelete.forEach(button => {
+            button.addEventListener("click", (event) => {
+                console.log("holaaaaaa")
+                const idEliminar = event.target.id;
+                funciones.eliminarOperacion(idEliminar); 
+    
+                const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
+                pintarDatos(operacionesActualizadas);
+            });
         });
-    });
+    
+        $$arrayButtonsEdit.forEach(button => {
+            button.addEventListener("click", (event)=> {
+                console.log("chauuuuuu")
+                $balanceComponente.classList.remove("flex")
+                $balanceComponente.classList.add("hidden")
+                
+                $inputFormEdit.classList.remove("hidden")
+                $inputFormEdit.classList.remove("hidden")
+    
+                const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
+                const operacionBuscada = operacionesActualizadas.find(element => element.id === event.target.id)
 
-    $$arrayButtonsEdit.forEach(button => {
-        button.addEventListener("click", (event)=> {
-            console.log("chauuuuuu")
-            $balanceComponente.classList.remove("flex")
-            $balanceComponente.classList.add("hidden")
-            
+                $inputNameEdit.value = operacionBuscada.name
+                $inputMontoEdit.value = operacionBuscada.quantity
+                $inputTypeEdit.value = operacionBuscada.type
+                $inputDateEdit.value = dayjs(operacionBuscada.date, "DD-MM-YYYY").format("YYYY-MM-DD")
 
-            $formEdit.classList.remove("hidden")
-            $formEdit.classList.remove("hidden")
-
+                
+    
+            })
         })
-    })
+    }
 
+   
+    editarEliminarOperaciones()
 
     actualizarBalance(arrayOperaciones);
 }
