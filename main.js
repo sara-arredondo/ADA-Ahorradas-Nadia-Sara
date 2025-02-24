@@ -44,6 +44,9 @@ const $balanceGanancia = $("#balance-ganancia")
 const $balanceGasto = $("#balance-gasto")
 const $balanceTotal = $("#balance-total")
 
+const $panelSinOperaciones = $("#panel-sin-operaciones")
+const $panelConOperaciones = $("#panel-con-operaciones")
+
 // ---------------------------------------------inicio codigo para ocultar menu hamburguesa mobile y cambio de icono  ---------------------------------------------------
 
 
@@ -242,6 +245,16 @@ $inputFilterSort.addEventListener("change", (event) => {
 function pintarDatos(arrayOperaciones) {
 
     $listOperaciones.innerHTML = "";
+
+    if (arrayOperaciones.length === 0) {
+        $panelSinOperaciones.classList.remove("hidden");
+        $panelConOperaciones.classList.add("hidden");
+        return; // Sale de la función sin pintar ninguna operación
+    } else {
+        // Si hay operaciones, asegúrate de ocultar el panel
+        $panelSinOperaciones.classList.add("hidden");
+        $panelConOperaciones.classList.remove("hidden");
+    }
 
     for (const operacion of arrayOperaciones) {
 

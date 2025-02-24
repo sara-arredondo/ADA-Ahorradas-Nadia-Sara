@@ -163,21 +163,21 @@
                     <button id="agregrar-operacion-componente-button" type='button' class='py-2.5 pl-6 pr-3.5 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 flex items-center hover:bg-rojo'>Nueva Operación ></button>
                 </div>
 
-                <!-- planel cuando no hay operaciones -->
-                <div class="h-fit hidden">
+                <!-- panel cuando no hay operaciones -->
+                <div id="panel-sin-operaciones" class="h-fit hidden">
                     <div class="h-72 lg:h-96 flex justify-center mb-8">
                         <img class="h-full" src="./assets/svg/no-hay-operaciones.svg" alt="">
                     </div>
                     <div class="">
                         <h3 class="text-lg font-bold text-center">Sin operaciones</h3>
-                        <p class="text-center" >Cambia los filtros o agrega operaciones</p>
+                        <p class="text-center">Cambia los filtros o agrega operaciones</p>
                     </div>   
                 </div>
 
                 <!-- panel cuando hay operaciones operaciones -->
-                <div class="flex lg:flex-col xl:flex-col">
+                <div id="panel-con-operaciones" class="flex lg:flex-col xl:flex-col">
 
-                    <!-- titúlos tabla -->
+                    <!-- titulos tabla -->
                     <div class="hidden lg:flex text-lg font-bold">
                         <span class="w-1/5">Descripción</span>
                         <span class="w-1/5 flex justify-end">Categoría</span>
