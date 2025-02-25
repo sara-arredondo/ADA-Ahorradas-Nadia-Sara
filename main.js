@@ -22,7 +22,7 @@ const $ocultarFiltros = $("#ocultar-filtros")
 const $balanceComponente = $("#balance-componente");
 const $agregarOperacionComponente = $("#agregar-operacion-componente");
 const $categoriaComponente = $("#categoria-componente");
-const $reporteComponente = $("#reporte-componente");
+
 const $formFiltros = $("#form-filtros")
 
 const $menuIconMobile = $("#menu-icon-mobile");
@@ -33,7 +33,7 @@ const $buttonCancelarOperacion = $("#button-cancelar-operacion")
 
 const $listOperaciones = $("#list-operaciones");
 
-const $contenedorFilterCategory =$("#contenedor-filter-categoria")
+const $contenedorFilterCategory = $("#contenedor-filter-categoria")
 
 const $inputFilterType = $("#filter-type")
 const $inputFilterCategory = $("#filter-category")
@@ -43,6 +43,12 @@ const $inputFilterSort = $("#filter-sort")
 const $balanceGanancia = $("#balance-ganancia")
 const $balanceGasto = $("#balance-gasto")
 const $balanceTotal = $("#balance-total")
+
+//---selecciones reportes---//
+const $reporteComponente = $("#reporte-componente");
+
+
+const $$botonEditar = $$(".b")
 
 // ---------------------------------------------inicio codigo para ocultar menu hamburguesa mobile y cambio de icono  ---------------------------------------------------
 
@@ -124,7 +130,7 @@ $ocultarFiltros.addEventListener("click", (event) => {
     } else {
         $ocultarFiltros.textContent = "Ocultar filtros";
     }
-    
+
 })
 
 
@@ -149,7 +155,7 @@ $formCreate.addEventListener("submit", (event) => {
     $agregarOperacionComponente.classList.add("hidden");
     $balanceComponente.classList.remove("hidden");
     $balanceComponente.classList.add("flex");
-    
+
 })
 
 function actualizarBalance(operaciones) {
@@ -178,7 +184,7 @@ function actualizarBalance(operaciones) {
 
 $inputFilterType.addEventListener("input", (event) => {
 
-    if(event.target.value !== "Todos") {
+    if (event.target.value !== "Todos") {
         const operacionesFiltradasType = funciones.datosTodasLasOperaciones.filter(element => element.type === event.target.value)
         pintarDatos(operacionesFiltradasType)
     } else {
@@ -191,7 +197,7 @@ $inputFilterDate.addEventListener("change", (event) => {
 
     const fechaSeleccionada = dayjs(event.target.value, "YYYY-MM-DD");
     console.log("Fecha seleccionada:", fechaSeleccionada.format("DD-MM-YYYY"));
-    
+
     // Filtra las operaciones que sean de la fecha seleccionada o posteriores
     const operacionesFiltradasDate = funciones.datosTodasLasOperaciones.filter(operacion => {
         const fechaOperacion = dayjs(operacion.date, "DD-MM-YYYY");
@@ -200,7 +206,7 @@ $inputFilterDate.addEventListener("change", (event) => {
         // Retorna true si la fecha de la operación es igual o posterior a la fecha seleccionada
         return fechaOperacion.isSame(fechaSeleccionada) || fechaOperacion.isAfter(fechaSeleccionada);
     });
-    
+
     // Actualiza el DOM con las operaciones filtradas
     pintarDatos(operacionesFiltradasDate);
 });
@@ -208,31 +214,34 @@ $inputFilterDate.addEventListener("change", (event) => {
 $inputFilterSort.addEventListener("change", (event) => {
 
     const sortOperaciones = event.target.value;
-    let nuevoArraySort= [...funciones.datosTodasLasOperaciones];
+    let nuevoArraySort = [...funciones.datosTodasLasOperaciones];
 
-    if(sortOperaciones === "mas-reciente") {
-        nuevoArraySort.sort((a,b) => {
+    if (sortOperaciones === "mas-reciente") {
+        nuevoArraySort.sort((a, b) => {
             const fechaA = dayjs(a.date, "DD-MM-YYYY");
             const fechaB = dayjs(b.date, "DD-MM-YYYY");
             return fechaB - fechaA;
         });
-    } else if(sortOperaciones === "menos-reciente") {
-        nuevoArraySort.sort((a,b) => {
+    } else if (sortOperaciones === "menos-reciente") {
+        nuevoArraySort.sort((a, b) => {
             const fechaA = dayjs(a.date, "DD-MM-YYYY");
             const fechaB = dayjs(b.date, "DD-MM-YYYY");
             return fechaA - fechaB;
         });
-    } else if(sortOperaciones === "mayor-monto") {
-        nuevoArraySort.sort((a,b) =>  b.quantity - a.quantity)
-    } else if(sortOperaciones === "menor-monto") {
-        nuevoArraySort.sort((a,b) => a.quantity - b.quantity )
-    } else if(sortOperaciones === "ascendente") {
-        nuevoArraySort.sort((a,b) => a.name.localeCompare(b.name))
-    } else if(sortOperaciones === "descendente") {
-        nuevoArraySort.sort((a,b) => b.name.localeCompare(a.name))
+    } else if (sortOperaciones === "mayor-monto") {
+        nuevoArraySort.sort((a, b) => b.quantity - a.quantity)
+    } else if (sortOperaciones === "menor-monto") {
+        nuevoArraySort.sort((a, b) => a.quantity - b.quantity)
+    } else if (sortOperaciones === "ascendente") {
+        nuevoArraySort.sort((a, b) => a.name.localeCompare(b.name))
+    } else if (sortOperaciones === "descendente") {
+        nuevoArraySort.sort((a, b) => b.name.localeCompare(a.name))
     }
     pintarDatos(nuevoArraySort);
 });
+
+
+
 
 
 // ---------------------------------------------inicio codigo para pintar datos ---------------------------------------------------
@@ -248,7 +257,7 @@ function pintarDatos(arrayOperaciones) {
         const signoMonto = operacion.type === "Ganancia" ? "+" : "-"
 
         $listOperaciones.innerHTML +=
-        
+
             `<div class="border-b border-azul pb-4 pt-4">           
                 <div class="flex flex-col gap-2 lg:flex-row lg:items-center">
                               
@@ -261,19 +270,377 @@ function pintarDatos(arrayOperaciones) {
                         <span class="hidden w-1/3 lg:flex justify-end ">${operacion.date}</span>
                         <span class="w-1/3  font-bold flex lg:justify-end xl:justify-end md:justify-start ${colorMonto}">${signoMonto}${operacion.quantity}</span>
                         <div class="w-1/3 flex justify-end space-x-2">
-                            <button id=${operacion.id} class="text-blue-600 hover:underline">Editar</button>
-                            <button id=${operacion.id} class="text-blue-600 hover:underline">Eliminar</button>
+                            <button id=${operacion.id} class="button-edit text-blue-600 hover:underline">Editar</button>
+                            <button id=${operacion.id} class="button-delete text-blue-600 hover:underline">Eliminar</button>
                         </div>
                     </div>
                 </div>
             </div>`
     }
 
+
     actualizarBalance(arrayOperaciones);
 }
+
+
+//---actualizar reporte---//
+
+const actualizarReportes = () => {
+    const datos = funciones.leerLocalStorage("operaciones")
+
+    
+    const todasLasCategorias = datos.filter(elem =>elem.type ==="category")
+
+
+    //--ganancia--//
+    const Ganancia = datos.filter(elem => elem.type === "Ganancia");
+
+    const totalGanancia = Ganancia.reduce((acc, curr) => acc + curr.quantity, 0)
+    const categoriasGanancia = Ganancia.reduce((acc, curr) => {
+        if (!acc[curr.category]) {
+            acc[curr.category] = 0; // Inicializa la categoría si no existe
+        }
+        acc[curr.category] += curr.quantity; // Acumula las ganancias de cada categoría
+        return acc;
+    }, {});
+    const categoriaMayorGanancia = Object.keys(categoriasGanancia).reduce((maxCategory, currentCategory) => {
+        if (categoriasGanancia[currentCategory] > categoriasGanancia[maxCategory]) {
+            return currentCategory; // Actualiza la categoría con mayor ganancia
+        }
+        return maxCategory; // Mantiene la categoría actual
+    });
+    const montoMayorGanancia = categoriasGanancia[categoriaMayorGanancia];
+
+    //--gasto--//
+    const Gasto = datos.filter(elem => elem.type === "Gasto");
+
+    const totalGasto = Gasto.reduce((acc, curr) => acc + curr.quantity, 0)
+    const categoriasGasto = Gasto.reduce((acc, curr) => {
+        if (!acc[curr.category]) {
+            acc[curr.category] = 0; // Inicializa la categoría si no existe
+        }
+        acc[curr.category] += curr.quantity; // Acumula las ganancias de cada categoría
+        return acc;
+    }, {});
+    const categoriaMayorGasto = Object.keys(categoriasGasto).reduce((maxCategory, currentCategory) => {
+        if (categoriasGasto[currentCategory] > categoriasGasto[maxCategory]) {
+            return currentCategory; // Actualiza la categoría con mayor ganancia
+        }
+        return maxCategory; // Mantiene la categoría actual
+    });
+
+    const montoMayorGasto = categoriasGasto[categoriaMayorGasto];
+
+    //---balance--//
+    const totalBalance = totalGanancia - totalGasto
+
+    const balances = Object.keys(categoriasGanancia).reduce((acc, category) => {
+       
+        const ganancia = categoriasGanancia[category] || 0;
+        const gasto = categoriasGasto[category] || 0;
+        acc[category] = ganancia - gasto;
+        return acc;
+    }, {});
+    const categoriaMayorBalance = Object.keys(balances).reduce((maxCategory, currentCategory) => {
+        if (balances[currentCategory] > balances[maxCategory]) {
+            return currentCategory; // 
+        }
+        return maxCategory; 
+    });
+
+    const mayorBalance = balances[categoriaMayorBalance];
+
+    // Agrupar las ganancias por mes
+    const gananciasPorMes = Ganancia.reduce((acc, curr) => {
+        const mes = dayjs(curr.date, "DD-MM-YYYY").format("MM-YYYY"); // Formato mes-año
+        if (!acc[mes]) {
+            acc[mes] = 0; // Inicializa el mes si no existe
+        }
+        acc[mes] += curr.quantity; // Acumula las ganancias por mes
+        return acc;
+    }, {});
+
+
+    // mes con mayor  ganancia---//
+
+   
+    const operaciones = [];
+    
+
+    operaciones.filter(op => op.type === "Ganancia").forEach(op => {
+        const mes = dayjs(op.date, "DD-MM-YYYY").format("YYYY-MM");  // Obtener el mes en formato "YYYY-MM"
+
+        if (!gananciasPorMes[mes]) {
+            gananciasPorMes[mes] = 0;  // Inicializar el mes con 0 si no existe
+        }
+
+        gananciasPorMes[mes] += op.quantity;  // Sumar la cantidad de la ganancia para ese mes
+    });
+
+
+    // Mostrar el mes con la mayor ganancia
+    const GANANCIASMESES = {};
+
+    // Filtrar las operaciones de tipo "Ganancia" y agrupar por mes
+    operaciones.filter(op => op.type === "Ganancia").forEach(op => {
+        const mes = dayjs(op.date, "DD-MM-YYYY").format("YYYY-MM");  // Obtener el mes en formato "YYYY-MM"
+
+        if (!GANANCIASMESES[mes]) {
+            GANANCIASMESES[mes] = 0;  // Inicializar el mes con 0 si no existe
+        }
+
+        GANANCIASMESES[mes] += op.quantity;  // Sumar la cantidad de la ganancia para ese mes
+    });
+
+    // Encontrar el mes con la mayor ganancia en GANANCIASMESES
+    const mesConMayorGanancia = Object.entries(GANANCIASMESES).reduce((acc, [mes, ganancia]) => {
+        return ganancia > acc.ganancia ? { mes, ganancia } : acc;
+    }, { mes: "", ganancia: 0 });
+
+    // Crear una fecha válida para dayjs, agregando un día al mes
+    const mesFormateado = dayjs(mesConMayorGanancia.mes + "-01", "YYYY-MM-DD").format("DD/MM/YYYY");
+
+
+    //---categorias  crear o eliminar --//
+   
+const categorias = [];
+
+
+const $formCreateCategoria = document.getElementById("formCreateCategoria");
+const $categoriaInput = document.getElementById("categoriaInput");
+const $listaCategorias = document.getElementById("listaCategorias");
+
+
+$formCreateCategoria.addEventListener("submit", (event) => {
+    event.preventDefault(); 
+
+   
+    const nuevaCategoria = $categoriaInput.value.trim();
+
+    
+    if (nuevaCategoria !== "") {
+        
+        categorias.push(nuevaCategoria);
+
+       
+        $categoriaInput.value = "";
+
+        
+        pintarCategorias();
+    } else {
+        alert("Por favor, ingresa una categoría válida.");
+    }
+});
+
+
+function pintarCategorias() {
+    // Limpiar la lista de categorías antes de agregar nuevas
+    $listaCategorias.innerHTML = ""; // Esto borra todo el contenido dentro del <ul>
+
+    
+    let htmlCategorias = "";
+
+    
+    categorias.forEach((categoria, index) => {
+        htmlCategorias += `
+            <li class="flex justify-between items-center border p-2 rounded mb-2">
+                <span class="text-xl">${categoria}</span>
+                <div class="flex gap-4">
+                    <a href="#" class="editar" data-index="${index}">Editar</a>
+                    <a href="#" class="eliminar" data-index="${index}">Eliminar</a>
+                </div>
+            </li>
+        `;
+    });
+
+    
+    $listaCategorias.innerHTML += htmlCategorias;
+
+   
+    agregarEventosCategorias();
+}
+
+
+function agregarEventosCategorias() {
+   
+    const botonesEditar = document.querySelectorAll('.editar');
+    botonesEditar.forEach(boton => {
+        boton.addEventListener('click', (event) => {
+            event.preventDefault();
+            const index = event.target.getAttribute('data-index');
+            editarCategoria(index); // Llamar a la función de editar pasando el index
+        });
+    });
+
+   
+    const botonesEliminar = document.querySelectorAll('.eliminar');
+    botonesEliminar.forEach(boton => {
+        boton.addEventListener('click', (event) => {
+            event.preventDefault();
+            const index = event.target.getAttribute('data-index');
+            eliminarCategoria(index); 
+        });
+    });
+}
+
+// Función para editar una categoría
+function editarCategoria(index) {
+    
+    const nuevaCategoria = prompt("Editar categoría:", categorias[index]);
+
+    
+    if (nuevaCategoria !== null && nuevaCategoria.trim() !== "") {
+        categorias[index] = nuevaCategoria.trim();
+        pintarCategorias(); 
+    }
+}
+
+// Función para eliminar una categoría
+function eliminarCategoria(index) {
+  
+    if (confirm("¿Estás seguro de que quieres eliminar esta categoría?")) {
+       
+        categorias.splice(index, 1);
+        pintarCategorias(); // Repintar la lista después de eliminar
+    }
+}
+
+
+pintarCategorias();
+
+    //-------------------------//
+
+
+
+    $reporteComponente.innerHTML = `<!-- componente de reportes cuando hay operaciones -->
+    <section class="h-fit ">
+   
+        <!-- resumen --> 
+        <article class="mb-24">
+
+            <!-- título resumen --> 
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold"></h2>
+            </div>
+
+            <!-- categoria con mayor ganancia -->
+            <div class="flex flex-rom justify-between mb-4">
+                <p class="w-1/2 font-bold">Categoria con mayor ganancia</p>
+                <div class="w-1/4 flex justify-end">
+                    <span class="border border-azul p-2 rounded-full text-xs">${categoriaMayorGanancia}</span>
+                </div>
+                <span class="w-1/4 flex justify-end">${montoMayorGanancia}</span>
+            </div>
+        
+            <!-- categoria con mayor gasto -->
+            <div class="flex flex-rom justify-between mb-4">
+                <p class="w-1/2 font-bold">Categoria con mayor gasto</p>
+                <div class="w-1/4 flex justify-end">
+                    <span class="border border-azul p-2 rounded-full text-xs">${categoriaMayorGasto}</span>
+                </div>         
+                <span class="w-1/4 flex justify-end">${montoMayorGasto}</span>
+            </div>
+
+            <!-- categoria con mayor balance -->
+            <div class="flex flex-rom justify-between mb-4">
+                <p class="w-1/2 font-bold">Categoria con mayor balance </p>
+                <div class="w-1/4 flex justify-end">
+                    <span class="border border-azul p-2 rounded-full text-xs">${categoriaMayorBalance}</span>
+                </div>  
+                <span class="w-1/4 flex justify-end">${mayorBalance}</span>
+            </div>
+           
+            <!-- mes con mayor ganancia -->
+            <div class="flex flex-rom justify-between mb-4">
+                <p class="w-1/2 font-bold">Mes con mayor ganancia</p>
+                <div class="w-1/4 flex justify-end">
+                    <span>${mesFormateado}</span>
+                </div>
+                <span class="w-1/4 flex justify-end"></span>
+            </div>
+       
+            <!-- mes con mayor gasto -->
+            <div class="flex flex-rom justify-between mb-4">
+                <p class="w-1/2 font-bold">Mes con mayor gasto</p>
+                <div class="w-1/4 flex justify-end">
+                    <span>DD/MM/AAAA</span>
+                </div>
+                <span class="w-1/4 flex justify-end">+$XXXX</span>
+            </div>
+        
+        </article>
+        
+        <!-- totales por categoria --> 
+        <article class="mb-16">
+
+            <!-- título Por categorias --> 
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold">Totales por categoria</h2>
+            </div>
+
+            <!-- títulos columnas -->
+            
+            <div class="flex flex-row mb-4">
+                <span class="w-1/4 flex justify-start font-bold"></span>
+                <span class="w-1/4 flex justify-end font-bold ">Ganancias</span>
+                <span class="w-1/4 flex justify-end font-bold">Gastos</span>
+                <span class="w-1/4 flex justify-end font-bold">Balance</span>
+            </div>
+           
+            <!-- fila para reemplazar -->
+            <div class="flex flex-row mb-6">
+                <div class="w-1/4 flex justify-start">
+                    <span class="border border-azul p-2 rounded-full text-xs">trabajo</span>
+                </div>
+                <span class="w-1/4 flex justify-end text-green-600">${totalGanancia}</span>
+                <span class="w-1/4 flex justify-end text-red-600">${totalGasto}</span>
+                <span class="w-1/4 flex justify-end">${totalBalance}</span>
+            </div>
+
+        </article>    
+    
+        <!-- totales por mes --> 
+        <article class="mb-16">
+
+            <!-- título Por mes --> 
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold">Totales por mes</h2>
+            </div>
+
+            <!-- títulos columnas -->
+            <div class="flex flex-row mb-4">
+                <span class="w-1/4 flex justify-start font-bold">Mes</span>
+                <span class="w-1/4 flex justify-end font-bold">Ganancias</span>
+                <span class="w-1/4 flex justify-end font-bold">Gastos</span>
+                <span class="w-1/4 flex justify-end font-bold">Balance</span>
+            </div>
+           
+            <!-- fila para reemplazar -->
+            <div class="flex flex-row mb-6">
+                <span class="w-1/4 flex justify-start"></span>
+                <span class="w-1/4 flex justify-end"></span>
+                <span class="w-1/4 flex justify-end">Gastos</span>
+                <span class="w-1/4 flex justify-end">Balance</span>
+            </div>
+
+        </article>
+        
+    </section>
+   
+</section>`
+
+}
+
+
+
 
 window.onload = () => {
     funciones.datosTodasLasOperaciones = funciones.leerLocalStorage("operaciones");
 
     pintarDatos(funciones.datosTodasLasOperaciones)
+    actualizarReportes()
 }
+
+
+
+
