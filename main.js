@@ -159,7 +159,7 @@ $formCreate.addEventListener("submit", (event) => {
 
     const nuevaOperacion = {
         id: crypto.randomUUID(),
-        name: event.target[0].value,
+        name: capitalize(event.target[0].value),
         quantity: Number(event.target[1].value),
         type: event.target[2].value,
         category: event.target[3].value,
@@ -226,6 +226,10 @@ function actualizarBalance(operaciones) {
     $balanceTotal.textContent = totalBalance >= 0 ? `+${totalBalance}` : `${totalBalance}`;
 }
 
+function capitalize (str) {
+    if (!str) return "";
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 // ---------------------------------------------inicio codigo para filtrar ---------------------------------------------------
 

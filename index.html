@@ -211,20 +211,20 @@
 
                     <!-- input para describir el tipo de operacion -->
                     <div class="flex flex-col mb-4">
-                        <label class="mb-2" for="">Descripción</label>
-                        <input id="name-operation" placeholder="Dale un nombre a tu operacion" type="text" class="h-10 rounded-lg border-rojo border px-4">
+                        <label class="mb-2" for="name-operation">Descripción</label>
+                        <input id="name-operation" placeholder="Dale un nombre a tu operacion" type="text" required class="h-10 rounded-lg border-rojo border px-4">
                     </div>
 
                     <!-- input para ingresar el monto -->
                     <div class="flex flex-col mb-4">
-                        <label class="mb-2" for="">Monto</label>
-                        <input id="quantity-operation" type="number" placeholder="Ingresa la cantidad en números" class="h-10 rounded-lg border-rojo border px-4">
+                        <label class="mb-2" for="quantity-operation">Monto</label>
+                        <input id="quantity-operation" type="number" placeholder="Ingresa la cantidad en números" required class="h-10 rounded-lg border-rojo border px-4">
                     </div>
 
                     <!-- input para seleccionar el tipo de gasto -->
                     <div class="flex flex-col mb-4">
-                        <label class="mb-2" for="">Tipo</label>
-                        <select name=""  id="type-operation" class="h-10 rounded-lg border-rojo border px-4">
+                        <label class="mb-2" for="type-operation">Tipo</label>
+                        <select name=""  id="type-operation" required class="h-10 rounded-lg border-rojo border px-4">
                             <option value="" disabled selected>Selecciona una opción</option>
                             <option value="Gasto">Gasto</option>
                             <option value="Ganancia">Ganancia</option>
@@ -233,7 +233,7 @@
 
                     <!-- input para seleccionar la categoria del gasto -->
                     <div class="flex flex-col mb-4">
-                        <label class="mb-2" for="">Categoria</label>
+                        <label class="mb-2" for="category-operation">Categoria</label>
                         <select name="" id="category-operation" class="h-10 rounded-lg border-rojo border px-4">
                             <option value="Comida">Comida</option>
                             <option value="Servicios">Servicios</option>
@@ -246,8 +246,8 @@
 
                     <!-- input para ingresar la fecha-->
                     <div class="flex flex-col mb-4">
-                        <label class="mb-2" for="">Fecha</label>
-                        <input id="create-date" type="date" class="h-10 rounded-lg border-rojo border px-4">
+                        <label class="mb-2" for="create-date">Fecha</label>
+                        <input id="create-date" type="date" required class="h-10 rounded-lg border-rojo border px-4">
                     </div>
 
                     <!-- input botones-->
