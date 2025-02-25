@@ -172,7 +172,7 @@ function actualizarBalance(operaciones) {
 
     let totalBalance = totalGanancia - totalGasto;
 
-    // Actualiza los elementos del DOM
+   
     $balanceGanancia.textContent = `+${totalGanancia}`;
     $balanceGasto.textContent = `-${totalGasto}`;
     $balanceTotal.textContent = totalBalance >= 0 ? `+${totalBalance}` : `${totalBalance}`;
@@ -298,16 +298,16 @@ const actualizarReportes = () => {
     const totalGanancia = Ganancia.reduce((acc, curr) => acc + curr.quantity, 0)
     const categoriasGanancia = Ganancia.reduce((acc, curr) => {
         if (!acc[curr.category]) {
-            acc[curr.category] = 0; // Inicializa la categoría si no existe
+            acc[curr.category] = 0; 
         }
-        acc[curr.category] += curr.quantity; // Acumula las ganancias de cada categoría
+        acc[curr.category] += curr.quantity; 
         return acc;
     }, {});
     const categoriaMayorGanancia = Object.keys(categoriasGanancia).reduce((maxCategory, currentCategory) => {
         if (categoriasGanancia[currentCategory] > categoriasGanancia[maxCategory]) {
-            return currentCategory; // Actualiza la categoría con mayor ganancia
+            return currentCategory; 
         }
-        return maxCategory; // Mantiene la categoría actual
+        return maxCategory; 
     });
     const montoMayorGanancia = categoriasGanancia[categoriaMayorGanancia];
 
@@ -317,16 +317,16 @@ const actualizarReportes = () => {
     const totalGasto = Gasto.reduce((acc, curr) => acc + curr.quantity, 0)
     const categoriasGasto = Gasto.reduce((acc, curr) => {
         if (!acc[curr.category]) {
-            acc[curr.category] = 0; // Inicializa la categoría si no existe
+            acc[curr.category] = 0; 
         }
-        acc[curr.category] += curr.quantity; // Acumula las ganancias de cada categoría
+        acc[curr.category] += curr.quantity; 
         return acc;
     }, {});
     const categoriaMayorGasto = Object.keys(categoriasGasto).reduce((maxCategory, currentCategory) => {
         if (categoriasGasto[currentCategory] > categoriasGasto[maxCategory]) {
-            return currentCategory; // Actualiza la categoría con mayor ganancia
+            return currentCategory; 
         }
-        return maxCategory; // Mantiene la categoría actual
+        return maxCategory; 
     });
 
     const montoMayorGasto = categoriasGasto[categoriaMayorGasto];
@@ -350,13 +350,13 @@ const actualizarReportes = () => {
 
     const mayorBalance = balances[categoriaMayorBalance];
 
-    // Agrupar las ganancias por mes
+    
     const gananciasPorMes = Ganancia.reduce((acc, curr) => {
         const mes = dayjs(curr.date, "DD-MM-YYYY").format("MM-YYYY"); // Formato mes-año
         if (!acc[mes]) {
-            acc[mes] = 0; // Inicializa el mes si no existe
+            acc[mes] = 0; 
         }
-        acc[mes] += curr.quantity; // Acumula las ganancias por mes
+        acc[mes] += curr.quantity; 
         return acc;
     }, {});
 
@@ -368,36 +368,36 @@ const actualizarReportes = () => {
     
 
     operaciones.filter(op => op.type === "Ganancia").forEach(op => {
-        const mes = dayjs(op.date, "DD-MM-YYYY").format("YYYY-MM");  // Obtener el mes en formato "YYYY-MM"
+        const mes = dayjs(op.date, "DD-MM-YYYY").format("YYYY-MM");  
 
         if (!gananciasPorMes[mes]) {
-            gananciasPorMes[mes] = 0;  // Inicializar el mes con 0 si no existe
+            gananciasPorMes[mes] = 0; 
         }
 
-        gananciasPorMes[mes] += op.quantity;  // Sumar la cantidad de la ganancia para ese mes
+        gananciasPorMes[mes] += op.quantity; 
     });
 
 
     // Mostrar el mes con la mayor ganancia
     const GANANCIASMESES = {};
 
-    // Filtrar las operaciones de tipo "Ganancia" y agrupar por mes
+    
     operaciones.filter(op => op.type === "Ganancia").forEach(op => {
-        const mes = dayjs(op.date, "DD-MM-YYYY").format("YYYY-MM");  // Obtener el mes en formato "YYYY-MM"
+        const mes = dayjs(op.date, "DD-MM-YYYY").format("YYYY-MM");  
 
         if (!GANANCIASMESES[mes]) {
-            GANANCIASMESES[mes] = 0;  // Inicializar el mes con 0 si no existe
+            GANANCIASMESES[mes] = 0; 
         }
 
-        GANANCIASMESES[mes] += op.quantity;  // Sumar la cantidad de la ganancia para ese mes
+        GANANCIASMESES[mes] += op.quantity;  
     });
 
-    // Encontrar el mes con la mayor ganancia en GANANCIASMESES
+    
     const mesConMayorGanancia = Object.entries(GANANCIASMESES).reduce((acc, [mes, ganancia]) => {
         return ganancia > acc.ganancia ? { mes, ganancia } : acc;
     }, { mes: "", ganancia: 0 });
 
-    // Crear una fecha válida para dayjs, agregando un día al mes
+   
     const mesFormateado = dayjs(mesConMayorGanancia.mes + "-01", "YYYY-MM-DD").format("DD/MM/YYYY");
 
 
@@ -434,8 +434,8 @@ $formCreateCategoria.addEventListener("submit", (event) => {
 
 
 function pintarCategorias() {
-    // Limpiar la lista de categorías antes de agregar nuevas
-    $listaCategorias.innerHTML = ""; // Esto borra todo el contenido dentro del <ul>
+   
+    $listaCategorias.innerHTML = ""; 
 
     
     let htmlCategorias = "";
@@ -468,7 +468,7 @@ function agregarEventosCategorias() {
         boton.addEventListener('click', (event) => {
             event.preventDefault();
             const index = event.target.getAttribute('data-index');
-            editarCategoria(index); // Llamar a la función de editar pasando el index
+            editarCategoria(index); 
         });
     });
 
@@ -501,7 +501,7 @@ function eliminarCategoria(index) {
     if (confirm("¿Estás seguro de que quieres eliminar esta categoría?")) {
        
         categorias.splice(index, 1);
-        pintarCategorias(); // Repintar la lista después de eliminar
+        pintarCategorias(); 
     }
 }
 
