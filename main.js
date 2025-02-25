@@ -174,7 +174,7 @@ $formCreate.addEventListener("submit", (event) => {
     $balanceComponente.classList.remove("hidden");
     $balanceComponente.classList.add("flex");
 
-    
+    $formCreate.reset();
 })
 
 $formEdit.addEventListener("submit", (event) => {
