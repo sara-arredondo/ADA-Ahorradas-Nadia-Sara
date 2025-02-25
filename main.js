@@ -36,11 +36,11 @@ const $inputNameEdit = $("#name-edit")
 const $inputMontoEdit = $("#monto-edit")
 const $inputTypeEdit = $("#type-edit")
 const $inputDateEdit = $("#date-edit")
+const $buttonCancelarEdit = $("#button-cancelar-edit")
 
 const $listOperaciones = $("#list-operaciones");
 
 const $contenedorFilterCategory =$("#contenedor-filter-categoria")
-
 
 const $inputFilterType = $("#filter-type")
 const $inputFilterCategory = $("#filter-category")
@@ -105,6 +105,15 @@ $buttonCancelarOperacion.addEventListener("click", (event) => {
 
 });
 
+$buttonCancelarEdit.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    $agregarOperacionComponente.classList.add("hidden");
+
+    $balanceComponente.classList.remove("hidden");
+    $balanceComponente.classList.add("flex");
+})
+
 //Boton categoria
 $categoriaButton.addEventListener("click", () => {
     $categoriaComponente.classList.remove("hidden");
@@ -139,7 +148,7 @@ $ocultarFiltros.addEventListener("click", (event) => {
 })
 
 
-// ---------------------------------------------inicio codigo para atrapar datos del formulario de crear ---------------------------------------------------
+// ---------------------------------------------inicio codigo para atrapar datos del formulario de crear y editar ---------------------------------------------------
 
 
 $formCreate.addEventListener("submit", (event) => {
@@ -163,6 +172,31 @@ $formCreate.addEventListener("submit", (event) => {
     $balanceComponente.classList.add("flex");
     
 })
+
+$FormEdit.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    //const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
+    //const operacionBuscada = operacionesActualizadas.find(element => element.id === event.target.id)
+
+    const operacionBuscada = $FormEdit.id;
+
+    const nuevosDatos = {
+        name: event.target[0].value,
+        quantity: Number(event.target[1].value),
+        type: event.target[2].value,
+        category: event.target[3].value,
+        date: dayjs(event.target[4].value, "YYYY-MM-DD").format("DD-MM-YYYY"),
+    };
+
+    const datosModificados =  funciones.editarOperacion(operacionBuscada, nuevosDatos);
+    pintarDatos(datosModificados);
+
+    $agregarOperacionComponente.classList.add("hidden");
+    $balanceComponente.classList.remove("hidden");
+    $balanceComponente.classList.add("flex");
+    
+}); 
 
 function actualizarBalance(operaciones) {
     let totalGanancia = 0;
@@ -249,26 +283,7 @@ $inputFilterSort.addEventListener("change", (event) => {
 
 // ---------------------------------------------inicio codigo para pintar datos ---------------------------------------------------
 
-$FormEdit.addEventListener("submit", (event) => {
-    event.preventDefault();
 
-    //const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
-    //const operacionBuscada = operacionesActualizadas.find(element => element.id === event.target.id)
-
-    const operacionBuscada = $FormEdit.id;
-
-    const nuevosDatos = {
-        name: event.target[0].value,
-        quantity: Number(event.target[1].value),
-        type: event.target[2].value,
-        category: event.target[3].value,
-        date: dayjs(event.target[4].value, "YYYY-MM-DD").format("DD-MM-YYYY"),
-    };
-
-    const datosModificados =  funciones.editarOperacion(operacionBuscada, nuevosDatos);
-    pintarDatos(datosModificados);
-    
-}); 
 
 function pintarDatos(arrayOperaciones) {
 
