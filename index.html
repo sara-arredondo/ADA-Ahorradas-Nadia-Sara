@@ -110,9 +110,9 @@
                        <div class="flex flex-col mb-4">
                            <label class="mb-2" for="">Tipo</label>
                            <select id="filter-type" class="h-10 rounded-lg border-rojo border px-4" name="">
-                               <option value="Todos">Todos</option>
-                               <option value="Gasto">Gasto</option>
-                               <option value="Ganancia">Ganancia</option>
+                                <option value="Todos">Todos</option>
+                                <option value="Gasto">Gasto</option>
+                                <option value="Ganancia">Ganancia</option>
                            </select>
                        </div>
    
@@ -212,19 +212,20 @@
                     <!-- input para describir el tipo de operacion -->
                     <div class="flex flex-col mb-4">
                         <label class="mb-2" for="">Descripción</label>
-                        <input id="name-operation" type="text" class="h-10 rounded-lg border-rojo border px-4">
+                        <input id="name-operation" placeholder="Dale un nombre a tu operacion" type="text" class="h-10 rounded-lg border-rojo border px-4">
                     </div>
 
                     <!-- input para ingresar el monto -->
                     <div class="flex flex-col mb-4">
                         <label class="mb-2" for="">Monto</label>
-                        <input id="quantity-operation" type="number" class="h-10 rounded-lg border-rojo border px-4">
+                        <input id="quantity-operation" type="number" placeholder="Ingresa la cantidad en números" class="h-10 rounded-lg border-rojo border px-4">
                     </div>
 
                     <!-- input para seleccionar el tipo de gasto -->
                     <div class="flex flex-col mb-4">
                         <label class="mb-2" for="">Tipo</label>
-                        <select name="" id="type-operation" class="h-10 rounded-lg border-rojo border px-4">
+                        <select name=""  id="type-operation" class="h-10 rounded-lg border-rojo border px-4">
+                            <option value="" disabled selected>Selecciona una opción</option>
                             <option value="Gasto">Gasto</option>
                             <option value="Ganancia">Ganancia</option>
                         </select>
