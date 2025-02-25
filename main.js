@@ -31,7 +31,7 @@ const $containerButtonsMenu = $("#container-menu-buttons");
 const $formCreate = $("#form-create")
 const $buttonCancelarOperacion = $("#button-cancelar-operacion")
 
-const $FormEdit = $("#form-edit")
+const $formEdit = $("#form-edit")
 const $inputNameEdit = $("#name-edit")
 const $inputMontoEdit = $("#monto-edit")
 const $inputTypeEdit = $("#type-edit")
@@ -112,6 +112,9 @@ $buttonCancelarEdit.addEventListener("click", (event) => {
 
     $balanceComponente.classList.remove("hidden");
     $balanceComponente.classList.add("flex");
+
+    $formEdit.classList.remove("flex")
+    $formEdit.classList.add("hidden")
 })
 
 //Boton categoria
@@ -170,16 +173,17 @@ $formCreate.addEventListener("submit", (event) => {
     $agregarOperacionComponente.classList.add("hidden");
     $balanceComponente.classList.remove("hidden");
     $balanceComponente.classList.add("flex");
+
     
 })
 
-$FormEdit.addEventListener("submit", (event) => {
+$formEdit.addEventListener("submit", (event) => {
     event.preventDefault();
 
     //const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
     //const operacionBuscada = operacionesActualizadas.find(element => element.id === event.target.id)
 
-    const operacionBuscada = $FormEdit.id;
+    const operacionBuscada = $formEdit.id;
 
     const nuevosDatos = {
         name: event.target[0].value,
@@ -193,9 +197,13 @@ $FormEdit.addEventListener("submit", (event) => {
     pintarDatos(datosModificados);
 
     $agregarOperacionComponente.classList.add("hidden");
+    
     $balanceComponente.classList.remove("hidden");
     $balanceComponente.classList.add("flex");
-    
+
+    $formEdit.classList.remove("flex")
+    $formEdit.classList.add("hidden")
+
 }); 
 
 function actualizarBalance(operaciones) {
@@ -351,7 +359,7 @@ function pintarDatos(arrayOperaciones) {
                 $balanceComponente.classList.remove("flex")
                 $balanceComponente.classList.add("hidden")
                 
-                $FormEdit.classList.remove("hidden")
+                $formEdit.classList.remove("hidden")
     
                 const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
                 const operacionBuscada = operacionesActualizadas.find(element => element.id === event.target.id)
@@ -361,7 +369,7 @@ function pintarDatos(arrayOperaciones) {
                 $inputTypeEdit.value = operacionBuscada.type
                 $inputDateEdit.value = dayjs(operacionBuscada.date,"DD-MM-YYYY").format("YYYY-MM-DD")
                 
-                $FormEdit.id = operacionBuscada.id
+                $formEdit.id = operacionBuscada.id
             })
         })
     }
