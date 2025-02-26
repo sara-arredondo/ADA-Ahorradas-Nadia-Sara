@@ -392,7 +392,7 @@ function pintarDatos(arrayOperaciones) {
 }
 
 
-//-----------------------Actualizar Reporte---------------//
+//-----------------------Actualizar Reporte-----------------------//
 
 
 
@@ -416,17 +416,12 @@ const mesMayorGasto = Object.keys(gastosPorMes).reduce((maxMes, mesActual) => {
     return maxMes;
 });
 
-
-
-
-
 //----------------------//
 
 const actualizarReportes = () => {
     const datos = funciones.leerLocalStorage("operaciones")
     const todasLasCategorias = datos.filter(elem => elem.type === "category")
     //-- Categoria con mayor ganancia- y su monto-//
-
     const Ganancia = datos.filter(elem => elem.type === "Ganancia");
     const totalGanancia = Ganancia.reduce((acc, curr) => acc + curr.quantity, 0)
     const categoriasGanancia = Ganancia.reduce((acc, curr) => {
@@ -442,7 +437,7 @@ const actualizarReportes = () => {
         }
         return maxCategory;
     });
-    
+
     const montoMayorGanancia = categoriasGanancia[categoriaMayorGanancia];
 
     //-- mes con mas  Gasto en Reporte-//
