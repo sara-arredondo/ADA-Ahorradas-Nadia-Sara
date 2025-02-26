@@ -1,7 +1,5 @@
 // ---------------------------------------------inicio funcion para leer LS ---------------------------------------------------
 
-// ---------------------------------------------inicio funcion para leer LS ---------------------------------------------------
-
 let datosTodasLasOperaciones = JSON.parse(localStorage.getItem("operaciones")) || [];
 
 function leerLocalStorage(key) {
@@ -33,3 +31,4 @@ export default {
     filtrarPorTipo,
     datosTodasLasOperaciones,
 }
+
