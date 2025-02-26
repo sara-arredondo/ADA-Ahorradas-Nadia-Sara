@@ -31,6 +31,13 @@ const $containerButtonsMenu = $("#container-menu-buttons");
 const $formCreate = $("#form-create")
 const $buttonCancelarOperacion = $("#button-cancelar-operacion")
 
+const $formEdit = $("#form-edit")
+const $inputNameEdit = $("#name-edit")
+const $inputMontoEdit = $("#monto-edit")
+const $inputTypeEdit = $("#type-edit")
+const $inputDateEdit = $("#date-edit")
+const $buttonCancelarEdit = $("#button-cancelar-edit")
+
 const $listOperaciones = $("#list-operaciones");
 
 const $contenedorFilterCategory = $("#contenedor-filter-categoria")
@@ -40,9 +47,13 @@ const $inputFilterCategory = $("#filter-category")
 const $inputFilterDate = $("#filter-date")
 const $inputFilterSort = $("#filter-sort")
 
+
 const $balanceGanancia = $("#balance-ganancia")
 const $balanceGasto = $("#balance-gasto")
 const $balanceTotal = $("#balance-total")
+
+const $panelSinOperaciones = $("#panel-sin-operaciones")
+const $panelConOperaciones = $("#panel-con-operaciones")
 
 //---selecciones reportes---//
 const $reporteComponente = $("#reporte-componente");
@@ -90,7 +101,7 @@ $agregarOperacionButton.addEventListener("click", () => {
 
 //Boton para cancelar la creacion de una nueva operacion redirge a panel balance
 $buttonCancelarOperacion.addEventListener("click", (event) => {
-    preventDefault(event);
+    event.preventDefault();
 
     $agregarOperacionComponente.classList.add("hidden");
 
@@ -99,6 +110,18 @@ $buttonCancelarOperacion.addEventListener("click", (event) => {
 
 
 });
+
+$buttonCancelarEdit.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    $agregarOperacionComponente.classList.add("hidden");
+
+    $balanceComponente.classList.remove("hidden");
+    $balanceComponente.classList.add("flex");
+
+    $formEdit.classList.remove("flex")
+    $formEdit.classList.add("hidden")
+})
 
 //Boton categoria
 $categoriaButton.addEventListener("click", () => {
@@ -120,7 +143,6 @@ $reporteButton.addEventListener("click", () => {
     $categoriaComponente.classList.add("hidden");
 })
 
-
 $ocultarFiltros.addEventListener("click", (event) => {
     event.preventDefault();
     $formFiltros.classList.toggle("hidden");// Asegura que se esconda correctamente
@@ -134,7 +156,7 @@ $ocultarFiltros.addEventListener("click", (event) => {
 })
 
 
-// ---------------------------------------------inicio codigo para atrapar datos del formulario de crear ---------------------------------------------------
+// ---------------------------------------------inicio codigo para atrapar datos del formulario de crear y editar ---------------------------------------------------
 
 
 $formCreate.addEventListener("submit", (event) => {
@@ -142,7 +164,7 @@ $formCreate.addEventListener("submit", (event) => {
 
     const nuevaOperacion = {
         id: crypto.randomUUID(),
-        name: event.target[0].value,
+        name: capitalize(event.target[0].value),
         quantity: Number(event.target[1].value),
         type: event.target[2].value,
         category: event.target[3].value,
@@ -151,13 +173,44 @@ $formCreate.addEventListener("submit", (event) => {
     }
 
     funciones.agregarOperacion(nuevaOperacion);
+    funciones.datosTodasLasOperaciones = funciones.leerLocalStorage("operaciones");
     pintarDatos(funciones.datosTodasLasOperaciones);
 
     $agregarOperacionComponente.classList.add("hidden");
     $balanceComponente.classList.remove("hidden");
     $balanceComponente.classList.add("flex");
 
+    $formCreate.reset();
 })
+
+$formEdit.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    //const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
+    //const operacionBuscada = operacionesActualizadas.find(element => element.id === event.target.id)
+
+    const operacionBuscada = $formEdit.id;
+
+    const nuevosDatos = {
+        name: event.target[0].value,
+        quantity: Number(event.target[1].value),
+        type: event.target[2].value,
+        category: event.target[3].value,
+        date: dayjs(event.target[4].value, "YYYY-MM-DD").format("DD-MM-YYYY"),
+    };
+
+    const datosModificados =  funciones.editarOperacion(operacionBuscada, nuevosDatos);
+    pintarDatos(datosModificados);
+
+    $agregarOperacionComponente.classList.add("hidden");
+    
+    $balanceComponente.classList.remove("hidden");
+    $balanceComponente.classList.add("flex");
+
+    $formEdit.classList.remove("flex")
+    $formEdit.classList.add("hidden")
+
+}); 
 
 function actualizarBalance(operaciones) {
     let totalGanancia = 0;
@@ -179,6 +232,10 @@ function actualizarBalance(operaciones) {
     $balanceTotal.textContent = totalBalance >= 0 ? `+${totalBalance}` : `${totalBalance}`;
 }
 
+function capitalize(str) {
+    if (!str) return "";
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 // ---------------------------------------------inicio codigo para filtrar ---------------------------------------------------
 
@@ -247,10 +304,21 @@ $inputFilterSort.addEventListener("change", (event) => {
 
 // ---------------------------------------------inicio codigo para pintar datos ---------------------------------------------------
 
-
 function pintarDatos(arrayOperaciones) {
 
     $listOperaciones.innerHTML = "";
+
+    actualizarBalance(arrayOperaciones);
+
+    if (arrayOperaciones.length === 0) {
+        $panelSinOperaciones.classList.remove("hidden");
+        $panelConOperaciones.classList.add("hidden");
+        return; // Sale de la función sin pintar ninguna operación
+    } else {
+        // Si hay operaciones, asegúrate de ocultar el panel
+        $panelSinOperaciones.classList.add("hidden");
+        $panelConOperaciones.classList.remove("hidden");
+    }
 
     for (const operacion of arrayOperaciones) {
 
@@ -279,6 +347,46 @@ function pintarDatos(arrayOperaciones) {
             </div>`
     }
 
+
+    const $$arrayButtonsEdit = $$(".button-edit")
+    const $$arraybuttonsDelete = $$(".button-delete")
+
+
+    function editarEliminarOperaciones() {
+        $$arraybuttonsDelete.forEach(button => {
+            button.addEventListener("click", (event) => {
+                console.log("holaaaaaa")
+                const idEliminar = event.target.id;
+                funciones.eliminarOperacion(idEliminar); 
+    
+                const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
+                pintarDatos(operacionesActualizadas);
+            });
+        });
+    
+        $$arrayButtonsEdit.forEach(button => {
+            button.addEventListener("click", (event)=> {
+                console.log("chauuuuuu")
+                $balanceComponente.classList.remove("flex")
+                $balanceComponente.classList.add("hidden")
+                
+                $formEdit.classList.remove("hidden")
+    
+                const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
+                const operacionBuscada = operacionesActualizadas.find(element => element.id === event.target.id)
+
+                $inputNameEdit.value = operacionBuscada.name
+                $inputMontoEdit.value = operacionBuscada.quantity
+                $inputTypeEdit.value = operacionBuscada.type
+                $inputDateEdit.value = dayjs(operacionBuscada.date,"DD-MM-YYYY").format("YYYY-MM-DD")
+                
+                $formEdit.id = operacionBuscada.id
+            })
+        })
+    }
+
+   
+    editarEliminarOperaciones()
 
     actualizarBalance(arrayOperaciones);
 }
