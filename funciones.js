@@ -16,6 +16,10 @@ function agregarOperacion(objetoNuevaOperacion) {
     datosTodasLasOperaciones.push(objetoNuevaOperacion)
     guardarLocalStorage("operaciones", datosTodasLasOperaciones)
 }
+function filtrarPorTipo(tipo) {
+    const datos =leerLocalStorage ("operaciones")
+    return datos.filter(elem => elem.type === tipo)
+  }
 
 // ---------------------------------------------inicio funcion para exportar datos ---------------------------------------------------
 
@@ -24,6 +28,7 @@ export default {
     leerLocalStorage,
     guardarLocalStorage,
     agregarOperacion,
+    filtrarPorTipo,
     datosTodasLasOperaciones,
 }
 
