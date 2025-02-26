@@ -137,7 +137,6 @@ $reporteButton.addEventListener("click", () => {
     $categoriaComponente.classList.add("hidden");
 })
 
-
 $ocultarFiltros.addEventListener("click", (event) => {
     event.preventDefault();
     $formFiltros.classList.toggle("hidden");// Asegura que se esconda correctamente
@@ -226,7 +225,7 @@ function actualizarBalance(operaciones) {
     $balanceTotal.textContent = totalBalance >= 0 ? `+${totalBalance}` : `${totalBalance}`;
 }
 
-function capitalize (str) {
+function capitalize(str) {
     if (!str) return "";
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -294,8 +293,6 @@ $inputFilterSort.addEventListener("change", (event) => {
 
 
 // ---------------------------------------------inicio codigo para pintar datos ---------------------------------------------------
-
-
 
 function pintarDatos(arrayOperaciones) {
 
@@ -383,6 +380,8 @@ function pintarDatos(arrayOperaciones) {
 
     actualizarBalance(arrayOperaciones);
 }
+
+
 
 window.onload = () => {
     funciones.datosTodasLasOperaciones = funciones.leerLocalStorage("operaciones");
