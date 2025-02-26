@@ -147,6 +147,7 @@ $formCreate.addEventListener("submit", (event) => {
         type: event.target[2].value,
         category: event.target[3].value,
         date: dayjs(event.target[4].value, "YYYY-MM-DD").format("DD-MM-YYYY"),
+        
     }
 
     funciones.agregarOperacion(nuevaOperacion);
@@ -285,6 +286,37 @@ function pintarDatos(arrayOperaciones) {
 
 //-----------------------Actualizar Reporte---------------//
 
+
+   
+   //---monto mes mayor gasto----//
+
+   
+
+  
+   const gastosPorMes = funciones.datosTodasLasOperaciones.reduce((acc, operacion) => {
+      const mesAnio = dayjs(operacion.date, "DD-MM-YYYY");
+        if (!acc[mesAnio]) {
+           acc[mesAnio] = 0;
+       }
+        acc[mesAnio] += operacion.quantity;
+       
+       return acc;
+   }, {});
+
+  
+   const mesMayorGasto = Object.keys(gastosPorMes).reduce((maxMes, mesActual) => {
+       if (gastosPorMes[mesActual] > gastosPorMes[maxMes]) {
+           return mesActual;
+       }
+       return maxMes;
+   });
+
+ 
+   
+   
+
+//----------------------//
+
 const actualizarReportes = () => {
     const datos = funciones.leerLocalStorage("operaciones")
     const todasLasCategorias = datos.filter(elem => elem.type === "category")
@@ -346,7 +378,7 @@ const actualizarReportes = () => {
     const mayorBalance = balances[categoriaMayorBalance];
 
     const gananciasPorMes = Ganancia.reduce((acc, curr) => {
-        const mes = dayjs(curr.date, "DD-MM-YYYY").format("MM-YYYY"); // Formato mes-año
+        const mes = dayjs(curr.date, "DD-MM-YYYY").format("MM-YYYY"); 
         if (!acc[mes]) {
             acc[mes] = 0;
         }
@@ -365,9 +397,7 @@ const actualizarReportes = () => {
         }
         gananciasPorMes[mes] += op.quantity;
     });
-
-
-    // Mostrar el mes con la mayor ganancia en Reporte---//
+// Mostrar el mes con la mayor ganancia en Reporte---//
     const GANANCIASMESES = {};
     operaciones.filter(op => op.type === "Ganancia").forEach(op => {
         const mes = dayjs(op.date, "DD-MM-YYYY").format("YYYY-MM");
@@ -385,16 +415,16 @@ const actualizarReportes = () => {
 
 
     const mesFormateado = dayjs(mesConMayorGanancia.mes + "-01", "YYYY-MM-DD").format("DD/MM/YYYY");
- //---------Pintar ---Reporte----------------//
+    //---------Pintar ---Reporte----------------//
 
- $reporteComponente.innerHTML = `<!-- componente de reportes cuando hay operaciones -->
+    $reporteComponente.innerHTML = `<!-- componente de reportes cuando hay operaciones -->
  <section class="h-fit ">
  <!-- resumen --> 
      <article class="mb-24">
 
          <!-- título resumen --> 
          <div class="mb-8">
-             <h2 class="text-2xl font-bold"></h2>
+             <h2 class="text-2xl font-bold">Reporte</h2>
          </div>
 
          <!-- categoria con mayor ganancia -->
@@ -439,7 +469,7 @@ const actualizarReportes = () => {
              <div class="w-1/4 flex justify-end">
                  <span>DD/MM/AAAA</span>
              </div>
-             <span class="w-1/4 flex justify-end">+$XXXX</span>
+             <span class="w-1/4 flex justify-end">${gastosPorMes[mesMayorGasto]}</span>
          </div>
      
      </article>
@@ -505,34 +535,34 @@ const actualizarReportes = () => {
 
 }
 
-    //--- crear o eliminar categorias en Categorias--//
+//--- crear o eliminar categorias en Categorias--//
 
-    const categorias = [];
+const categorias = [];
 
-    const $formCreateCategoria = document.getElementById("formCreateCategoria");
-    const $categoriaInput = document.getElementById("categoriaInput");
-    const $listaCategorias = document.getElementById("listaCategorias");
+const $formCreateCategoria = document.getElementById("formCreateCategoria");
+const $categoriaInput = document.getElementById("categoriaInput");
+const $listaCategorias = document.getElementById("listaCategorias");
 
-    $formCreateCategoria.addEventListener("submit", (event) => {
-        event.preventDefault();
+$formCreateCategoria.addEventListener("submit", (event) => {
+    event.preventDefault();
 
+    const nuevaCategoria = $categoriaInput.value.trim();
+    if (nuevaCategoria !== "") {
+        categorias.push(nuevaCategoria);
+        $categoriaInput.value = "";
+        pintarCategorias();
+    } else {
+        alert("Por favor, ingresa una categoría válida.");
+    }
+    
+});
 
-        const nuevaCategoria = $categoriaInput.value.trim();
-        if (nuevaCategoria !== "") {
-            categorias.push(nuevaCategoria);
-            $categoriaInput.value = "";
-            pintarCategorias();
-        } else {
-            alert("Por favor, ingresa una categoría válida.");
-        }
-    });
+function pintarCategorias() {
 
-    function pintarCategorias() {
-
-        $listaCategorias.innerHTML = "";
-        let htmlCategorias = "";
-        categorias.forEach((categoria, index) => {
-            htmlCategorias += `
+    $listaCategorias.innerHTML = "";
+    let htmlCategorias = "";
+    categorias.forEach((categoria, index) => {
+        htmlCategorias += `
             <li class="flex justify-between items-center border p-2 rounded mb-2">
                 <span class="text-xl">${categoria}</span>
                 <div class="flex gap-4">
@@ -541,61 +571,67 @@ const actualizarReportes = () => {
                 </div>
             </li>
         `;
+    });
+
+    $listaCategorias.innerHTML += htmlCategorias;
+    agregarEventosCategorias();
+}
+
+//---agregar nueva categoria a filtro---//
+// Función para editar una categoría en Categorias--//
+
+function agregarEventosCategorias() {
+
+    const botonesEditar = document.querySelectorAll('.editar');
+    botonesEditar.forEach(boton => {
+        boton.addEventListener('click', (event) => {
+            event.preventDefault();
+            const index = event.target.getAttribute('data-index');
+            editarCategoria(index);
         });
-
-        $listaCategorias.innerHTML += htmlCategorias;
-        agregarEventosCategorias();
-    }
-
-
-    function agregarEventosCategorias() {
-
-        const botonesEditar = document.querySelectorAll('.editar');
-        botonesEditar.forEach(boton => {
-            boton.addEventListener('click', (event) => {
-                event.preventDefault();
-                const index = event.target.getAttribute('data-index');
-                editarCategoria(index);
-            });
+    });
+    const botonesEliminar = document.querySelectorAll('.eliminar');
+    botonesEliminar.forEach(boton => {
+        boton.addEventListener('click', (event) => {
+            event.preventDefault();
+            const index = event.target.getAttribute('data-index');
+            eliminarCategoria(index);
         });
-        const botonesEliminar = document.querySelectorAll('.eliminar');
-        botonesEliminar.forEach(boton => {
-            boton.addEventListener('click', (event) => {
-                event.preventDefault();
-                const index = event.target.getAttribute('data-index');
-                eliminarCategoria(index);
-            });
-        });
+    });
+}
+function editarCategoria(index) {
+
+    const nuevaCategoria = prompt("Editar categoría:", categorias[index]);
+    if (nuevaCategoria !== null && nuevaCategoria.trim() !== "") {
+        categorias[index] = nuevaCategoria.trim();
+        pintarCategorias();
     }
+}
 
-    // Función para editar una categoría en Categorias--//
-    function editarCategoria(index) {
-
-        const nuevaCategoria = prompt("Editar categoría:", categorias[index]);
-        if (nuevaCategoria !== null && nuevaCategoria.trim() !== "") {
-            categorias[index] = nuevaCategoria.trim();
-            pintarCategorias();
-        }
+// Función para eliminar una categoría//
+function eliminarCategoria(index) {
+    if (confirm("¿Estás seguro de que quieres eliminar esta categoría?")) {
+        categorias.splice(index, 1);
+        pintarCategorias();
     }
+}
+pintarCategorias();
 
-    // Función para eliminar una categoría//
-    function eliminarCategoria(index) {
-        if (confirm("¿Estás seguro de que quieres eliminar esta categoría?")) {
-            categorias.splice(index, 1);
-            pintarCategorias();
-        }
-    }
-    pintarCategorias();
 
-   
 
 window.onload = () => {
     funciones.datosTodasLasOperaciones = funciones.leerLocalStorage("operaciones");
 
     pintarDatos(funciones.datosTodasLasOperaciones)
     actualizarReportes()
+
+    pintarCategorias()
+    agregarEventosCategorias()
+    
 }
 
 
 
+//  ---- ganancia --gasto -- y balance por mes //
 
+//-------------//
