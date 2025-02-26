@@ -46,7 +46,7 @@ const $balanceTotal = $("#balance-total")
 
 //---selecciones reportes---//
 const $reporteComponente = $("#reporte-componente");
-
+//---selecciones
 
 const $$botonEditar = $$(".b")
 
@@ -147,7 +147,7 @@ $formCreate.addEventListener("submit", (event) => {
         type: event.target[2].value,
         category: event.target[3].value,
         date: dayjs(event.target[4].value, "YYYY-MM-DD").format("DD-MM-YYYY"),
-        
+
     }
 
     funciones.agregarOperacion(nuevaOperacion);
@@ -287,40 +287,38 @@ function pintarDatos(arrayOperaciones) {
 //-----------------------Actualizar Reporte---------------//
 
 
-   
-   //---monto mes mayor gasto----//
 
-   
+//---monto mes mayor gasto----//
 
-  
-   const gastosPorMes = funciones.datosTodasLasOperaciones.reduce((acc, operacion) => {
-      const mesAnio = dayjs(operacion.date, "DD-MM-YYYY");
-        if (!acc[mesAnio]) {
-           acc[mesAnio] = 0;
-       }
-        acc[mesAnio] += operacion.quantity;
-       
-       return acc;
-   }, {});
+const gastosPorMes = funciones.datosTodasLasOperaciones.reduce((acc, operacion) => {
+    const mesAnio = dayjs(operacion.date, "YYYY-MM-DD").format("DD-MM-YYYY");
+    if (!acc[mesAnio]) {
+        acc[mesAnio] = 0;
+    }
+    acc[mesAnio] += operacion.quantity;
 
-  
-   const mesMayorGasto = Object.keys(gastosPorMes).reduce((maxMes, mesActual) => {
-       if (gastosPorMes[mesActual] > gastosPorMes[maxMes]) {
-           return mesActual;
-       }
-       return maxMes;
-   });
+    return acc;
+}, {});
 
- 
-   
-   
+
+const mesMayorGasto = Object.keys(gastosPorMes).reduce((maxMes, mesActual) => {
+    if (gastosPorMes[mesActual] > gastosPorMes[maxMes]) {
+        return mesActual;
+    }
+    return maxMes;
+});
+
+
+
+
 
 //----------------------//
 
 const actualizarReportes = () => {
     const datos = funciones.leerLocalStorage("operaciones")
     const todasLasCategorias = datos.filter(elem => elem.type === "category")
-    //-- mes con mas ganancia--//
+    //-- Categoria con mayor ganancia- y su monto-//
+
     const Ganancia = datos.filter(elem => elem.type === "Ganancia");
     const totalGanancia = Ganancia.reduce((acc, curr) => acc + curr.quantity, 0)
     const categoriasGanancia = Ganancia.reduce((acc, curr) => {
@@ -336,6 +334,7 @@ const actualizarReportes = () => {
         }
         return maxCategory;
     });
+    
     const montoMayorGanancia = categoriasGanancia[categoriaMayorGanancia];
 
     //-- mes con mas  Gasto en Reporte-//
@@ -349,6 +348,8 @@ const actualizarReportes = () => {
         acc[curr.category] += curr.quantity;
         return acc;
     }, {});
+    //----categoria con mayor gasto y su monto---//
+
     const categoriaMayorGasto = Object.keys(categoriasGasto).reduce((maxCategory, currentCategory) => {
         if (categoriasGasto[currentCategory] > categoriasGasto[maxCategory]) {
             return currentCategory;
@@ -358,7 +359,8 @@ const actualizarReportes = () => {
 
     const montoMayorGasto = categoriasGasto[categoriaMayorGasto];
 
-    //---balance--en Reporte//
+    //---balance por categoria--en Reporte//
+
     const totalBalance = totalGanancia - totalGasto
 
     const balances = Object.keys(categoriasGanancia).reduce((acc, category) => {
@@ -378,7 +380,7 @@ const actualizarReportes = () => {
     const mayorBalance = balances[categoriaMayorBalance];
 
     const gananciasPorMes = Ganancia.reduce((acc, curr) => {
-        const mes = dayjs(curr.date, "DD-MM-YYYY").format("MM-YYYY"); 
+        const mes = dayjs(curr.date, "DD-MM-YYYY").format("MM-YYYY");
         if (!acc[mes]) {
             acc[mes] = 0;
         }
@@ -397,7 +399,7 @@ const actualizarReportes = () => {
         }
         gananciasPorMes[mes] += op.quantity;
     });
-// Mostrar el mes con la mayor ganancia en Reporte---//
+    // Mostrar el mes con la mayor ganancia en Reporte---//
     const GANANCIASMESES = {};
     operaciones.filter(op => op.type === "Ganancia").forEach(op => {
         const mes = dayjs(op.date, "DD-MM-YYYY").format("YYYY-MM");
@@ -424,7 +426,8 @@ const actualizarReportes = () => {
 
          <!-- título resumen --> 
          <div class="mb-8">
-             <h2 class="text-2xl font-bold">Reporte</h2>
+             <h2 class="text-2xl font-bold">
+             ${mesMayorGasto}</h2>
          </div>
 
          <!-- categoria con mayor ganancia -->
@@ -433,7 +436,7 @@ const actualizarReportes = () => {
              <div class="w-1/4 flex justify-end">
                  <span class="border border-azul p-2 rounded-full text-xs">${categoriaMayorGanancia}</span>
              </div>
-             <span class="w-1/4 flex justify-end">${montoMayorGanancia}</span>
+             <span class="w-1/4 flex justify-end text-green-500">${montoMayorGanancia}</span>
          </div>
      
          <!-- categoria con mayor gasto -->
@@ -442,7 +445,7 @@ const actualizarReportes = () => {
              <div class="w-1/4 flex justify-end">
                  <span class="border border-azul p-2 rounded-full text-xs">${categoriaMayorGasto}</span>
              </div>         
-             <span class="w-1/4 flex justify-end">${montoMayorGasto}</span>
+             <span class="w-1/4 flex justify-end text-red-500">${montoMayorGasto}</span>
          </div>
 
          <!-- categoria con mayor balance -->
@@ -496,8 +499,8 @@ const actualizarReportes = () => {
              <div class="w-1/4 flex justify-start">
                  <span class="border border-azul p-2 rounded-full text-xs">trabajo</span>
              </div>
-             <span class="w-1/4 flex justify-end text-green-600">${totalGanancia}</span>
-             <span class="w-1/4 flex justify-end text-red-600">${totalGasto}</span>
+             <span class="w-1/4 flex justify-end text-green-500">${totalGanancia}</span>
+             <span class="w-1/4 flex justify-end text-red-500">${totalGasto}</span>
              <span class="w-1/4 flex justify-end">${totalBalance}</span>
          </div>
 
@@ -554,7 +557,7 @@ $formCreateCategoria.addEventListener("submit", (event) => {
     } else {
         alert("Por favor, ingresa una categoría válida.");
     }
-    
+
 });
 
 function pintarCategorias() {
@@ -574,10 +577,13 @@ function pintarCategorias() {
     });
 
     $listaCategorias.innerHTML += htmlCategorias;
+
     agregarEventosCategorias();
 }
 
 //---agregar nueva categoria a filtro---//
+
+
 // Función para editar una categoría en Categorias--//
 
 function agregarEventosCategorias() {
@@ -627,11 +633,9 @@ window.onload = () => {
 
     pintarCategorias()
     agregarEventosCategorias()
-    
+
 }
 
 
 
-//  ---- ganancia --gasto -- y balance por mes //
 
-//-------------//
