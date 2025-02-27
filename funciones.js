@@ -2,6 +2,9 @@
 
 let datosTodasLasOperaciones = JSON.parse(localStorage.getItem("operaciones")) || [];
 
+
+// panel balance y operacion
+
 function leerLocalStorage(key) {
     const datos = JSON.parse(localStorage.getItem(key)) || [];
     datosTodasLasOperaciones = datos;
@@ -16,6 +19,7 @@ function agregarOperacion(objetoNuevaOperacion) {
     datosTodasLasOperaciones.push(objetoNuevaOperacion)
     guardarLocalStorage("operaciones", datosTodasLasOperaciones)
 }
+
 function filtrarPorTipo(tipo) {
     const datos =leerLocalStorage ("operaciones")
     return datos.filter(elem => elem.type === tipo)
@@ -39,6 +43,52 @@ function editarOperacion (idOperacion, nuevosDatos){
 
     return operacionesActualizadas;
 }
+
+// panel categoria
+
+function obtenerCategorias(categoriasPredeterminadas) {
+    let categoriasGuardadas = JSON.parse(localStorage.getItem("categorias")) || [];
+
+    // 📌 Si `localStorage` está vacío, inicializamos con las categorías predeterminadas
+    if (categoriasGuardadas.length === 0) {
+        categoriasGuardadas = [...categoriasPredeterminadas];
+        localStorage.setItem("categorias", JSON.stringify(categoriasGuardadas));
+    }
+
+    return categoriasGuardadas;
+}
+
+function guardarCategorias(categorias) {
+    localStorage.setItem("categorias", JSON.stringify(categorias));
+}
+
+function agregarCategoria(nombre, categoriasPredeterminadas) {
+    let categorias = obtenerCategorias(categoriasPredeterminadas);
+    
+    if (!categorias.includes(nombre)) {
+        categorias.push(nombre);
+        guardarCategorias(categorias);
+    }
+}
+
+function eliminarCategoria(index, categoriasPredeterminadas) {
+    let categorias = obtenerCategorias(categoriasPredeterminadas);
+    
+    // Evitar eliminar categorías predeterminadas
+    if (index < categoriasPredeterminadas.length) return;
+
+    categorias.splice(index, 1);
+    guardarCategorias(categorias);
+}
+
+function editarCategoria(index, nuevoNombre, categoriasPredeterminadas) {
+    let categorias = obtenerCategorias(categoriasPredeterminadas);
+    
+    if (!categorias.includes(nuevoNombre)) {
+        categorias[index] = nuevoNombre;
+        guardarCategorias(categorias);
+    }
+}
 // ---------------------------------------------inicio funcion para exportar datos ---------------------------------------------------
 
 
@@ -49,6 +99,10 @@ export default {
     eliminarOperacion,
     editarOperacion,
     filtrarPorTipo,
+    obtenerCategorias,
+    agregarCategoria,
+    eliminarCategoria,
+    editarCategoria,
     datosTodasLasOperaciones,
 }
 
