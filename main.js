@@ -50,6 +50,7 @@ const $inputCreateCategoria = $("#create-category")
 const $categoryOperation = $("#category-operation")
 const $listCategorias = $("#list-categorias")
 const $inputFilterCategory = $("#filter-category")
+const $editCategoryFormEditOperacion = $("#edit-category-operacion")
 
 const $editCategoriaComponente = $("#edit-categoria-componente")
 const $formEditCategoria = $("#form-edit-categoria")
@@ -459,7 +460,13 @@ function actualizarCategoriasFormCreate(categorias) {
         const optionEtiqueta = `<option value="${categoria}">${categoria}</option>`
         $inputFilterCategory.innerHTML += optionEtiqueta;
     })
-    
+
+    $editCategoryFormEditOperacion.innerHTML = `<option value="Todos">Todos</option>`;
+    categorias.forEach(categoria => {
+        const optionEtiqueta = `<option value="${categoria}">${categoria}</option>`
+        $editCategoryFormEditOperacion.innerHTML += optionEtiqueta;
+    })
+        
 }
 
 // ---------------------------------------------inicio codigo para pintar datos ---------------------------------------------------
