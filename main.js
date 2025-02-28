@@ -342,6 +342,12 @@ $formEditCategoria.addEventListener("submit", (event) => {
         pintarCategorias();
         actualizarCategoriasFormCreate();
         $inputEditCategoria.value = ""; 
+
+        $editCategoriaComponente.classList.remove("flex")
+        $editCategoriaComponente.classList.add("hidden")
+
+        $categoriaComponente.classList.remove("hidden")
+        $categoriaComponente.classList.add("flex")
     }
 })
 
@@ -412,9 +418,6 @@ function pintarCategorias() {
                 const categoriaEditada = categoriasGuardadas[indexEditar];
 
                 $inputEditCategoria.value = categoriaEditada;
-
-
-
             })
         })
     }
