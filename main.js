@@ -40,15 +40,16 @@ const $buttonCancelarEdit = $("#button-cancelar-edit")
 
 const $listOperaciones = $("#list-operaciones");
 
-const $contenedorFilterCategory = $("#contenedor-filter-categoria")
 
 const $inputFilterType = $("#filter-type")
 const $inputFilterCategory = $("#filter-category")
 const $inputFilterDate = $("#filter-date")
 const $inputFilterSort = $("#filter-sort")
 
-const $formCreateCategoria = $("#form-create-categoria")
+const $formCreateCategoria = $("#form-create-categoria");
+const $inputCreateCategoria = $("#category")
 const $listCategorias = $("#list-categorias")
+
 
 const $balanceGanancia = $("#balance-ganancia")
 const $balanceGasto = $("#balance-gasto")
@@ -164,7 +165,7 @@ $formCreate.addEventListener("submit", (event) => {
         name: capitalize(event.target[0].value),
         quantity: Number(event.target[1].value),
         type: event.target[2].value,
-        category: event.target[3].value,
+        category: event.target.category.value,
         date: dayjs(event.target[4].value, "YYYY-MM-DD").format("DD-MM-YYYY"),
 
     }
@@ -295,10 +296,24 @@ $inputFilterSort.addEventListener("change", (event) => {
     pintarDatos(nuevoArraySort);
 });
 
+
 // ---------------------------------------------inicio codigo para crear categorias ---------------------------------------------------
 
-const categoriasPredeterminadas = ["Trabajo", "Educación", "Transporte", "Comida", "Salida"];
+$formCreateCategoria.addEventListener("submit", (event) => {
+    event.preventDefault();
 
+    const nuevaCategoria = capitalize($inputCreateCategoria.value);
+    
+    if (nuevaCategoria !== "") {
+        funciones.agregarCategoria(nuevaCategoria, categoriasPredeterminadas);
+        
+        pintarCategorias();
+        actualizarCategoriasFormCreate();
+        $inputCreateCategoria.value = ""; 
+    }
+});
+
+const categoriasPredeterminadas = ["Trabajo", "Educación", "Transporte", "Comida", "Salida"];
 
 const categoriasGuardadas = funciones.obtenerCategorias(categoriasPredeterminadas);
 
@@ -306,7 +321,6 @@ if (categoriasGuardadas.length === 0) {
     funciones.guardarCategorias(categoriasPredeterminadas);
     categoriasGuardadas = categoriasPredeterminadas;
 }
-
 
 function pintarCategorias() {
 
@@ -318,7 +332,7 @@ function pintarCategorias() {
 
     categoriasGuardadas.forEach((categoria, index) => {
         $listCategorias.innerHTML += `
-            <div class="flex justify-between items-center border-b border-azul p-2">
+            <div class="flex justify-between items-center border-b border-azul p-4">
                 <span class="border border-azul p-2 rounded-full text-xs">${categoria}</span>
                 <div class="flex gap-2">
                     <button class="text-blue-600 hover:underline btn-editar" data-index="${index}">Editar</button>
@@ -329,6 +343,16 @@ function pintarCategorias() {
     });
 
     agregarEventosCategorias();
+}
+
+function actualizarCategoriasFormCreate() {
+    const categoriasGuardadas = funciones.obtenerCategorias(categoriasPredeterminadas);
+
+    $inputFilterCategory.innerHTML = "";
+
+    categoriasGuardadas.forEach(categoria => {
+        $inputFilterCategory.innerHTML += `<option value="${categoria}">${categoria}</option`;
+    })
 }
 
 // ---------------------------------------------inicio codigo para pintar datos ---------------------------------------------------
@@ -425,6 +449,7 @@ window.onload = () => {
 
     pintarDatos(funciones.datosTodasLasOperaciones)
     pintarCategorias();
+    actualizarCategoriasFormCreate()
    
 
 }

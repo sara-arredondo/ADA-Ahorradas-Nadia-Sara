@@ -235,13 +235,7 @@
                     <!-- input para seleccionar la categoria del gasto -->
                     <div class="flex flex-col mb-4">
                         <label class="mb-2" for="category-operation">Categoria</label>
-                        <select name="" id="category-operation" class="h-10 rounded-lg border-rojo border px-4">
-                            <option value="Comida">Comida</option>
-                            <option value="Servicios">Servicios</option>
-                            <option value="Salidas">Salidas</option>
-                            <option value="Educación">Educación</option>
-                            <option value="Transporte">Transporte</option>
-                            <option value="Trabajo">Trabajo</option>
+                        <select name="category" id="category-operation" class="h-10 rounded-lg border-rojo border px-4">
                         </select>
                     </div>
 
@@ -335,7 +329,7 @@
                 <label class="mb-2 block" for="nombre">Nombre</label>
                 <div class="flex items-center space-x-4">
                     <!-- Input de texto -->
-                    <input id="category" value="category" type="text" class="h-10 flex-1 rounded-lg border border-rojo px-4 w-2/3">
+                    <input id="category" placeholder="Ingresa el nombre de la categoria que quieres crear" type="text" class="h-10 flex-1 rounded-lg border border-rojo px-4 w-2/3">
                     <!-- Botón de submit -->
                     <input type="submit" value="Agregar" class="h-10 py-2.5 px-6 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-rojo">
                 </div>
