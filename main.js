@@ -55,6 +55,7 @@ const $editCategoryFormEditOperacion = $("#edit-category-operacion")
 const $editCategoriaComponente = $("#edit-categoria-componente")
 const $formEditCategoria = $("#form-edit-categoria")
 const $inputEditCategoria = $("#input-edit-categoria")
+const $buttonCancelarEditCategoria = $("#button-cancelar-edit-categoria")
 
 const $balanceGanancia = $("#balance-ganancia")
 const $balanceGasto = $("#balance-gasto")
@@ -327,7 +328,7 @@ $formCreateCategoria.addEventListener("submit", (event) => {
         funciones.agregarCategoria(nuevaCategoria, categoriasPredeterminadas);
         
         pintarCategorias();
-        actualizarCategoriasFormCreate();
+        actualizarCategoriasFormCreateEditFilter();
         $inputCreateCategoria.value = ""; 
     }
 });
@@ -356,7 +357,7 @@ $formEditCategoria.addEventListener("submit", (event) => {
         funciones.datosTodasLasOperaciones = operaciones;
         
         pintarCategorias();
-        actualizarCategoriasFormCreate();
+        actualizarCategoriasFormCreateEditFilter();
         pintarDatos(operaciones);
         
         $inputEditCategoria.value = ""; 
@@ -369,11 +370,19 @@ $formEditCategoria.addEventListener("submit", (event) => {
     }
 })
 
+$buttonCancelarEditCategoria.addEventListener("click", (event)=> {
+    event.preventDefault();
+
+    $editCategoriaComponente.classList.add("hidden");
+
+    $categoriaComponente.classList.remove("hidden");
+    $categoriaComponente.classList.add("flex");
+})
 
 function cargarCategorias() {
     const categorias = funciones.obtenerCategorias(categoriasPredeterminadas);
     pintarCategorias(categorias); 
-    actualizarCategoriasFormCreate(categorias); 
+    actualizarCategoriasFormCreateEditFilter(categorias); 
 }
 
 function pintarCategorias() {
@@ -416,7 +425,7 @@ function pintarCategorias() {
                 funciones.datosTodasLasOperaciones = operaciones;
 
                 pintarCategorias();
-                actualizarCategoriasFormCreate(funciones.obtenerCategorias(categoriasPredeterminadas));
+                actualizarCategoriasFormCreateEditFilter(funciones.obtenerCategorias(categoriasPredeterminadas));
                 pintarDatos(operaciones);
             })
         })
@@ -444,7 +453,7 @@ function pintarCategorias() {
 
 }
 
-function actualizarCategoriasFormCreate(categorias) {
+function actualizarCategoriasFormCreateEditFilter(categorias) {
     if (!categorias) {
         categorias = funciones.obtenerCategorias(categoriasPredeterminadas);
         console.log("holaaa")
@@ -507,7 +516,7 @@ function pintarDatos(arrayOperaciones) {
                         <span class="w-1/3  font-bold flex lg:justify-end xl:justify-end md:justify-start ${colorMonto}">${signoMonto}${operacion.quantity}</span>
                         <div class="w-1/3 flex justify-end space-x-2">
                             <button id=${operacion.id} class="button-edit text-blue-600 hover:underline">Editar</button>
-                            <button id=${operacion.id} class="button-delete text-blue-600 hover:underline">Eliminar</button>
+                            <button id=${operacion.id} class="button-delete text-red-600 hover:underline">Eliminar</button>
                         </div>
                     </div>
                 </div>
@@ -565,7 +574,7 @@ window.onload = () => {
     
     pintarDatos(funciones.datosTodasLasOperaciones); 
     pintarCategorias(funciones.obtenerCategorias(categoriasPredeterminadas)); 
-    actualizarCategoriasFormCreate(funciones.obtenerCategorias(categoriasPredeterminadas));  
+    actualizarCategoriasFormCreateEditFilter(funciones.obtenerCategorias(categoriasPredeterminadas));  
     cargarCategorias()
     
 }

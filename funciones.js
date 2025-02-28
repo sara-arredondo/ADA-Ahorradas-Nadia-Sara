@@ -46,15 +46,6 @@ function editarOperacion (idOperacion, nuevosDatos){
 
 // panel categoria
 
-
-
-function cargarCategorias() {
-    const categorias = funciones.iniciarCategorias(categoriasPredeterminadas);
-    pintarCategorias(categorias); // ✅ Pinta las categorías en la UI
-    actualizarCategoriasFormCreate(categorias); // ✅ Actualiza el select de categorías
-}
-
-
 function obtenerCategorias(categoriasPredeterminadas) {
     let categoriasGuardadas = JSON.parse(localStorage.getItem("categorias")) || [];
 
