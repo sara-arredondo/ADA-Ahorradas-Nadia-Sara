@@ -40,7 +40,6 @@ const $buttonCancelarEdit = $("#button-cancelar-edit")
 
 const $listOperaciones = $("#list-operaciones");
 
-
 const $inputFilterType = $("#filter-type")
 
 const $inputFilterDate = $("#filter-date")
@@ -51,6 +50,7 @@ const $inputCreateCategoria = $("#create-category")
 const $categoryOperation = $("#category-operation")
 const $listCategorias = $("#list-categorias")
 const $inputFilterCategory = $("#filter-category")
+const $formEditCategoria = $("#form-edit-categoria")
 
 const $balanceGanancia = $("#balance-ganancia")
 const $balanceGasto = $("#balance-gasto")
@@ -354,7 +354,7 @@ function pintarCategorias() {
         `;
     });
 
-    //const $$arrayButtonEditCategory = $$(".button-eliminar-category")
+    const $$arrayButtonEditCategory = $$(".button-editar-category")
     const $$arrayButtonDeleteCategory = $$(".button-eliminar-category")
 
     function editarEliminarCategorias() {
@@ -376,6 +376,16 @@ function pintarCategorias() {
                 pintarCategorias();
                 actualizarCategoriasFormCreate(funciones.obtenerCategorias(categoriasPredeterminadas));
                 pintarDatos(operaciones);
+            })
+        })
+
+        $$arrayButtonEditCategory.forEach(button => {
+            button.addEventListener("click", (event) => {
+                console.log("pollo maligno")
+                $categoriaComponente.classList.remove("flex")
+                $categoriaComponente.classList.add("hidden")
+
+                $formEditCategoria.classList.remove("hidden")
             })
         })
     }
