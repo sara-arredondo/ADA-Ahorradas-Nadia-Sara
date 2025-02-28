@@ -165,7 +165,7 @@ $formCreate.addEventListener("submit", (event) => {
         name: capitalize(event.target[0].value),
         quantity: Number(event.target[1].value),
         type: event.target[2].value,
-        category: event.target.category.value,
+        category: capitalize(event.target.category.value),
         date: dayjs(event.target[4].value, "YYYY-MM-DD").format("DD-MM-YYYY"),
 
     }
@@ -315,11 +315,11 @@ $formCreateCategoria.addEventListener("submit", (event) => {
 
 const categoriasPredeterminadas = ["Trabajo", "Educación", "Transporte", "Comida", "Salida"];
 
-const categoriasGuardadas = funciones.obtenerCategorias(categoriasPredeterminadas);
 
-if (categoriasGuardadas.length === 0) {
-    funciones.guardarCategorias(categoriasPredeterminadas);
-    categoriasGuardadas = categoriasPredeterminadas;
+function cargarCategorias() {
+    const categorias = funciones.iniciarCategorias(categoriasPredeterminadas);
+    pintarCategorias(categorias); // ✅ Pinta las categorías en la UI
+    actualizarCategoriasFormCreate(categorias); // ✅ Actualiza el select de categorías
 }
 
 function pintarCategorias() {
@@ -345,14 +345,16 @@ function pintarCategorias() {
     agregarEventosCategorias();
 }
 
-function actualizarCategoriasFormCreate() {
-    const categoriasGuardadas = funciones.obtenerCategorias(categoriasPredeterminadas);
-
+function actualizarCategoriasFormCreate(categorias) {
     $inputFilterCategory.innerHTML = "";
+    const $categoryOperation = $("#category-operation"); 
+    $categoryOperation.innerHTML = ""; 
 
-    categoriasGuardadas.forEach(categoria => {
-        $inputFilterCategory.innerHTML += `<option value="${categoria}">${categoria}</option`;
-    })
+    categorias.forEach(categoria => {
+        const optionElement = `<option value="${categoria}">${categoria}</option>`;
+        $inputFilterCategory.innerHTML += optionElement;
+        $categoryOperation.innerHTML += optionElement; 
+    });
 }
 
 // ---------------------------------------------inicio codigo para pintar datos ---------------------------------------------------
@@ -442,16 +444,18 @@ function pintarDatos(arrayOperaciones) {
     editarEliminarOperaciones()
 
     actualizarBalance(arrayOperaciones);
+
+
 }
 
 window.onload = () => {
     funciones.datosTodasLasOperaciones = funciones.leerLocalStorage("operaciones");
-
-    pintarDatos(funciones.datosTodasLasOperaciones)
-    pintarCategorias();
-    actualizarCategoriasFormCreate()
-   
-
+    
+    pintarDatos(funciones.datosTodasLasOperaciones); 
+    pintarCategorias(funciones.obtenerCategorias(categoriasPredeterminadas)); 
+    actualizarCategoriasFormCreate(funciones.obtenerCategorias(categoriasPredeterminadas));  
+    cargarCategorias()
+    
 }
 
 
