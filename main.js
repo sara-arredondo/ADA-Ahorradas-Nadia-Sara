@@ -51,6 +51,7 @@ const $categoryOperation = $("#category-operation")
 const $listCategorias = $("#list-categorias")
 const $inputFilterCategory = $("#filter-category")
 
+const $editCategoriaComponente = $("#edit-categoria-componente")
 const $formEditCategoria = $("#form-edit-categoria")
 const $inputEditCategoria = $("#input-edit-categoria")
 
@@ -313,6 +314,8 @@ $inputFilterCategory.addEventListener("input", (event) => {
 
 // ---------------------------------------------inicio codigo para crear categorias ---------------------------------------------------
 
+const categoriasPredeterminadas = ["Trabajo", "Educación", "Transporte", "Comida", "Salida"];
+
 
 $formCreateCategoria.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -328,7 +331,19 @@ $formCreateCategoria.addEventListener("submit", (event) => {
     }
 });
 
-const categoriasPredeterminadas = ["Trabajo", "Educación", "Transporte", "Comida", "Salida"];
+$formEditCategoria.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const categoriaEditada = capitalize($inputEditCategoria.value);
+
+    if (categoriaEditada !== "") {
+        funciones.agregarCategoria(categoriaEditada, categoriasPredeterminadas);
+        
+        pintarCategorias();
+        actualizarCategoriasFormCreate();
+        $inputEditCategoria.value = ""; 
+    }
+})
 
 
 function cargarCategorias() {
@@ -388,9 +403,10 @@ function pintarCategorias() {
                 $categoriaComponente.classList.remove("flex")
                 $categoriaComponente.classList.add("hidden")
 
-                $formEditCategoria.classList.remove("hidden")
+                $editCategoriaComponente.classList.remove("hidden")
 
                 const indexEditar = button.dataset.index;
+                $editCategoriaComponente.dataset.index = indexEditar;
 
                 const categoriasGuardadas = funciones.obtenerCategorias(categoriasPredeterminadas);
                 const categoriaEditada = categoriasGuardadas[indexEditar];
