@@ -50,7 +50,9 @@ const $inputCreateCategoria = $("#create-category")
 const $categoryOperation = $("#category-operation")
 const $listCategorias = $("#list-categorias")
 const $inputFilterCategory = $("#filter-category")
+
 const $formEditCategoria = $("#form-edit-categoria")
+const $inputEditCategoria = $("#input-edit-categoria")
 
 const $balanceGanancia = $("#balance-ganancia")
 const $balanceGasto = $("#balance-gasto")
@@ -311,6 +313,7 @@ $inputFilterCategory.addEventListener("input", (event) => {
 
 // ---------------------------------------------inicio codigo para crear categorias ---------------------------------------------------
 
+
 $formCreateCategoria.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -390,7 +393,11 @@ function pintarCategorias() {
                 const indexEditar = button.dataset.index;
 
                 const categoriasGuardadas = funciones.obtenerCategorias(categoriasPredeterminadas);
-                const categoriaEliminada = categoriasGuardadas[indexEliminar];
+                const categoriaEditada = categoriasGuardadas[indexEditar];
+
+                $inputEditCategoria.value = categoriaEditada;
+
+
 
             })
         })
