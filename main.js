@@ -386,6 +386,12 @@ function pintarCategorias() {
                 $categoriaComponente.classList.add("hidden")
 
                 $formEditCategoria.classList.remove("hidden")
+
+                const indexEditar = button.dataset.index;
+
+                const categoriasGuardadas = funciones.obtenerCategorias(categoriasPredeterminadas);
+                const categoriaEliminada = categoriasGuardadas[indexEliminar];
+
             })
         })
     }

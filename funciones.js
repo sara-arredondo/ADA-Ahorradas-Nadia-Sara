@@ -46,7 +46,6 @@ function editarOperacion (idOperacion, nuevosDatos){
 
 // panel categoria
 
-const categoriasPredeterminadas = ["Trabajo", "Educación", "Transporte", "Comida", "Salida"];
 
 
 function cargarCategorias() {
@@ -85,6 +84,15 @@ function eliminarCategoria(index, categoriasPredeterminadas) {
     let categorias = obtenerCategorias(categoriasPredeterminadas);
     categorias.splice(index, 1);
     guardarCategorias(categorias);
+}
+
+function editarCategoria(index, nuevoNombre, categoriasPredeterminadas) {
+    let categorias = obtenerCategorias(categoriasPredeterminadas);
+    
+    if (!categorias.includes(nuevoNombre)) {
+        categorias[index] = nuevoNombre;
+        guardarCategorias(categorias);
+    }
 
 }
 
@@ -101,6 +109,7 @@ export default {
     obtenerCategorias,
     agregarCategoria,
     eliminarCategoria,
+    editarCategoria,
     datosTodasLasOperaciones,
 }
 
