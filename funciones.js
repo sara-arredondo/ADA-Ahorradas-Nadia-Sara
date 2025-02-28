@@ -48,7 +48,7 @@ function editarOperacion (idOperacion, nuevosDatos){
 
 const categoriasPredeterminadas = ["Trabajo", "Educación", "Transporte", "Comida", "Salida"];
 
-// 📌 Función para inicializar categorías y actualizar la UI
+
 function cargarCategorias() {
     const categorias = funciones.iniciarCategorias(categoriasPredeterminadas);
     pintarCategorias(categorias); // ✅ Pinta las categorías en la UI
@@ -83,22 +83,11 @@ function agregarCategoria(nombre, categoriasPredeterminadas) {
 
 function eliminarCategoria(index, categoriasPredeterminadas) {
     let categorias = obtenerCategorias(categoriasPredeterminadas);
-    
-    // Evitar eliminar categorías predeterminadas
-    if (index < categoriasPredeterminadas.length) return;
-
     categorias.splice(index, 1);
     guardarCategorias(categorias);
+
 }
 
-function editarCategoria(index, nuevoNombre, categoriasPredeterminadas) {
-    let categorias = obtenerCategorias(categoriasPredeterminadas);
-    
-    if (!categorias.includes(nuevoNombre)) {
-        categorias[index] = nuevoNombre;
-        guardarCategorias(categorias);
-    }
-}
 // ---------------------------------------------inicio funcion para exportar datos ---------------------------------------------------
 
 
@@ -112,7 +101,6 @@ export default {
     obtenerCategorias,
     agregarCategoria,
     eliminarCategoria,
-    editarCategoria,
     datosTodasLasOperaciones,
 }
 

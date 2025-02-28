@@ -347,12 +347,29 @@ function pintarCategorias() {
             <div class="flex justify-between items-center border-b border-azul p-4">
                 <span class="border border-azul p-2 rounded-full text-xs">${categoria}</span>
                 <div class="flex gap-2">
-                    <button class="text-blue-600 hover:underline btn-editar" data-index="${index}">Editar</button>
-                    <button class="text-red-600 hover:underline btn-eliminar" data-index="${index}">Eliminar</button>
+                    <button class="text-blue-600 hover:underline button-editar-category" data-index="${index}">Editar</button>
+                    <button class="text-red-600 hover:underline button-eliminar-category" data-index="${index}">Eliminar</button>
                 </div>
             </div>
         `;
     });
+
+    //const $$arrayButtonEditCategory = $$(".button-eliminar-category")
+    const $$arrayButtonDeleteCategory = $$(".button-eliminar-category")
+
+    function editarEliminarCategorias() {
+        $$arrayButtonDeleteCategory.forEach(button => {
+            button.addEventListener("click", (event) => {
+                const indexEliminar = button.dataset.index;
+                funciones.eliminarCategoria(indexEliminar, categoriasPredeterminadas)
+
+                pintarCategorias();
+                actualizarCategoriasFormCreate(funciones.obtenerCategorias(categoriasPredeterminadas));
+            })
+        })
+    }
+
+    editarEliminarCategorias()
 
 }
 
