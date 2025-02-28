@@ -42,7 +42,7 @@ const $listOperaciones = $("#list-operaciones");
 
 
 const $inputFilterType = $("#filter-type")
-const $inputFilterCategory = $("#filter-category")
+
 const $inputFilterDate = $("#filter-date")
 const $inputFilterSort = $("#filter-sort")
 
@@ -50,7 +50,7 @@ const $formCreateCategoria = $("#form-create-categoria");
 const $inputCreateCategoria = $("#create-category")
 const $categoryOperation = $("#category-operation")
 const $listCategorias = $("#list-categorias")
-
+const $inputFilterCategory = $("#filter-category")
 
 const $balanceGanancia = $("#balance-ganancia")
 const $balanceGasto = $("#balance-gasto")
@@ -352,9 +352,16 @@ function actualizarCategoriasFormCreate(categorias) {
     }
     $categoryOperation.innerHTML = ""; 
     categorias.forEach(categoria => {
-        const optionElement = `<option value="${categoria}">${categoria}</option>`;
-        $categoryOperation.innerHTML += optionElement; 
+        const optionEtiqueta = `<option value="${categoria}">${categoria}</option>`;
+        $categoryOperation.innerHTML += optionEtiqueta; 
     });
+
+    $inputFilterCategory.innerHTML = "";
+    categorias.forEach(categoria => {
+        const optionEtiqueta = `<option value="${categoria}">${categoria}</option>`
+        $inputFilterCategory.innerHTML += optionEtiqueta;
+    })
+    
 }
 
 // ---------------------------------------------inicio codigo para pintar datos ---------------------------------------------------
