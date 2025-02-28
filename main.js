@@ -255,7 +255,6 @@ $inputFilterDate.addEventListener("change", (event) => {
     const fechaSeleccionada = dayjs(event.target.value, "YYYY-MM-DD");
     console.log("Fecha seleccionada:", fechaSeleccionada.format("DD-MM-YYYY"));
 
-    // Filtra las operaciones que sean de la fecha seleccionada o posteriores
     const operacionesFiltradasDate = funciones.datosTodasLasOperaciones.filter(operacion => {
         const fechaOperacion = dayjs(operacion.date, "DD-MM-YYYY");
         console.log("Comparando operación:", operacion.date, "->", fechaOperacion.format("DD-MM-YYYY"));
@@ -296,6 +295,12 @@ $inputFilterSort.addEventListener("change", (event) => {
     }
     pintarDatos(nuevoArraySort);
 });
+
+$inputFilterCategory.addEventListener("input", (event) => {
+
+
+
+})
 
 
 // ---------------------------------------------inicio codigo para crear categorias ---------------------------------------------------
@@ -356,7 +361,7 @@ function actualizarCategoriasFormCreate(categorias) {
         $categoryOperation.innerHTML += optionEtiqueta; 
     });
 
-    $inputFilterCategory.innerHTML = "";
+    $inputFilterCategory.innerHTML = `<option value="Todos">Todos</option>`;
     categorias.forEach(categoria => {
         const optionEtiqueta = `<option value="${categoria}">${categoria}</option>`
         $inputFilterCategory.innerHTML += optionEtiqueta;
