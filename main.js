@@ -335,12 +335,18 @@ $formEditCategoria.addEventListener("submit", (event) => {
     event.preventDefault();
 
     const categoriaEditada = capitalize($inputEditCategoria.value);
+    const indexEditar = $editCategoriaComponente.dataset.index;
 
     if (categoriaEditada !== "") {
-        funciones.agregarCategoria(categoriaEditada, categoriasPredeterminadas);
+
+        const categoriasGuardadas = funciones.obtenerCategorias(categoriasPredeterminadas);
+        const categoriaAntigua = categoriasGuardadas[indexEditar];
+
+        funciones.editarCategoria(indexEditar, categoriaEditada, categoriasPredeterminadas);
         
         pintarCategorias();
         actualizarCategoriasFormCreate();
+        
         $inputEditCategoria.value = ""; 
 
         $editCategoriaComponente.classList.remove("flex")
