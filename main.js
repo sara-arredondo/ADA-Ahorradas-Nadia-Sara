@@ -47,7 +47,8 @@ const $inputFilterDate = $("#filter-date")
 const $inputFilterSort = $("#filter-sort")
 
 const $formCreateCategoria = $("#form-create-categoria");
-const $inputCreateCategoria = $("#category")
+const $inputCreateCategoria = $("#create-category")
+const $categoryOperation = $("#category-operation")
 const $listCategorias = $("#list-categorias")
 
 
@@ -165,7 +166,7 @@ $formCreate.addEventListener("submit", (event) => {
         name: capitalize(event.target[0].value),
         quantity: Number(event.target[1].value),
         type: event.target[2].value,
-        category: capitalize(event.target.category.value),
+        category: capitalize(event.target[3].value),
         date: dayjs(event.target[4].value, "YYYY-MM-DD").format("DD-MM-YYYY"),
 
     }
@@ -317,9 +318,9 @@ const categoriasPredeterminadas = ["Trabajo", "Educación", "Transporte", "Comid
 
 
 function cargarCategorias() {
-    const categorias = funciones.iniciarCategorias(categoriasPredeterminadas);
-    pintarCategorias(categorias); // ✅ Pinta las categorías en la UI
-    actualizarCategoriasFormCreate(categorias); // ✅ Actualiza el select de categorías
+    const categorias = funciones.obtenerCategorias(categoriasPredeterminadas);
+    pintarCategorias(categorias); 
+    actualizarCategoriasFormCreate(categorias); 
 }
 
 function pintarCategorias() {
@@ -342,17 +343,16 @@ function pintarCategorias() {
         `;
     });
 
-    agregarEventosCategorias();
 }
 
 function actualizarCategoriasFormCreate(categorias) {
-    $inputFilterCategory.innerHTML = "";
-    const $categoryOperation = $("#category-operation"); 
+    if (!categorias) {
+        categorias = funciones.obtenerCategorias(categoriasPredeterminadas);
+        console.log("holaaa")
+    }
     $categoryOperation.innerHTML = ""; 
-
     categorias.forEach(categoria => {
         const optionElement = `<option value="${categoria}">${categoria}</option>`;
-        $inputFilterCategory.innerHTML += optionElement;
         $categoryOperation.innerHTML += optionElement; 
     });
 }
