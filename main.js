@@ -343,9 +343,20 @@ $formEditCategoria.addEventListener("submit", (event) => {
         const categoriaAntigua = categoriasGuardadas[indexEditar];
 
         funciones.editarCategoria(indexEditar, categoriaEditada, categoriasPredeterminadas);
+
+        let operaciones = funciones.leerLocalStorage("operaciones");
+        operaciones = operaciones.map(operacion => {
+            if (operacion.category === categoriaAntigua) {
+                return { ...operacion, category: categoriaEditada };
+            }
+            return operacion;
+        });
+        funciones.guardarLocalStorage("operaciones", operaciones);
+        funciones.datosTodasLasOperaciones = operaciones;
         
         pintarCategorias();
         actualizarCategoriasFormCreate();
+        pintarDatos(operaciones);
         
         $inputEditCategoria.value = ""; 
 
