@@ -359,12 +359,23 @@ function pintarCategorias() {
 
     function editarEliminarCategorias() {
         $$arrayButtonDeleteCategory.forEach(button => {
-            button.addEventListener("click", (event) => {
+            button.addEventListener("click", () => {
                 const indexEliminar = button.dataset.index;
+
+                const categoriasGuardadas = funciones.obtenerCategorias(categoriasPredeterminadas);
+                const categoriaEliminada = categoriasGuardadas[indexEliminar];
+
                 funciones.eliminarCategoria(indexEliminar, categoriasPredeterminadas)
+
+                let operaciones = funciones.leerLocalStorage("operaciones");
+                operaciones = operaciones.filter(operacion => operacion.category !== categoriaEliminada);
+
+                funciones.guardarLocalStorage("operaciones", operaciones);
+                funciones.datosTodasLasOperaciones = operaciones;
 
                 pintarCategorias();
                 actualizarCategoriasFormCreate(funciones.obtenerCategorias(categoriasPredeterminadas));
+                pintarDatos(operaciones);
             })
         })
     }
