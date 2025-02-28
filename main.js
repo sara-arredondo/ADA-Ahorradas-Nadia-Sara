@@ -296,9 +296,15 @@ $inputFilterSort.addEventListener("change", (event) => {
     pintarDatos(nuevoArraySort);
 });
 
+
 $inputFilterCategory.addEventListener("input", (event) => {
 
-
+    if (event.target.value !== "Todos") {
+        const operacionesFiltradasCategory = funciones.datosTodasLasOperaciones.filter(element => element.category === event.target.value)
+        pintarDatos(operacionesFiltradasCategory)
+    } else {
+        pintarDatos(funciones.datosTodasLasOperaciones)
+    }
 
 })
 
