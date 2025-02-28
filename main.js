@@ -551,7 +551,3 @@ window.onload = () => {
     cargarCategorias()
     
 }
-
-
-
-

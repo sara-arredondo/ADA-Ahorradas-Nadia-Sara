@@ -112,4 +112,3 @@ export default {
     editarCategoria,
     datosTodasLasOperaciones,
 }
-
