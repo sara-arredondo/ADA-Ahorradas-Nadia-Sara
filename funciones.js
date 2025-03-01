@@ -50,5 +50,7 @@ export default {
     editarOperacion,
     filtrarPorTipo,
     datosTodasLasOperaciones,
+
+   
 }
 

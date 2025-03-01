@@ -31,13 +31,6 @@ const $containerButtonsMenu = $("#container-menu-buttons");
 const $formCreate = $("#form-create")
 const $buttonCancelarOperacion = $("#button-cancelar-operacion")
 
-const $formEdit = $("#form-edit")
-const $inputNameEdit = $("#name-edit")
-const $inputMontoEdit = $("#monto-edit")
-const $inputTypeEdit = $("#type-edit")
-const $inputDateEdit = $("#date-edit")
-const $buttonCancelarEdit = $("#button-cancelar-edit")
-
 const $listOperaciones = $("#list-operaciones");
 
 const $contenedorFilterCategory = $("#contenedor-filter-categoria")
@@ -47,13 +40,9 @@ const $inputFilterCategory = $("#filter-category")
 const $inputFilterDate = $("#filter-date")
 const $inputFilterSort = $("#filter-sort")
 
-
 const $balanceGanancia = $("#balance-ganancia")
 const $balanceGasto = $("#balance-gasto")
 const $balanceTotal = $("#balance-total")
-
-const $panelSinOperaciones = $("#panel-sin-operaciones")
-const $panelConOperaciones = $("#panel-con-operaciones")
 
 //---selecciones reportes---//
 const $reporteComponente = $("#reporte-componente");
@@ -101,7 +90,7 @@ $agregarOperacionButton.addEventListener("click", () => {
 
 //Boton para cancelar la creacion de una nueva operacion redirge a panel balance
 $buttonCancelarOperacion.addEventListener("click", (event) => {
-    event.preventDefault();
+    preventDefault(event);
 
     $agregarOperacionComponente.classList.add("hidden");
 
@@ -111,22 +100,10 @@ $buttonCancelarOperacion.addEventListener("click", (event) => {
 
 });
 
-$buttonCancelarEdit.addEventListener("click", (event) => {
-    event.preventDefault();
-
-    $agregarOperacionComponente.classList.add("hidden");
-
-    $balanceComponente.classList.remove("hidden");
-    $balanceComponente.classList.add("flex");
-
-    $formEdit.classList.remove("flex")
-    $formEdit.classList.add("hidden")
-})
-
 //Boton categoria
 $categoriaButton.addEventListener("click", () => {
     $categoriaComponente.classList.remove("hidden");
-    $balanceComponente.classList.add("flex"); // Asegura que se muestre correctamente
+    $balanceComponente.classList.add("flex");
 
     $agregarOperacionComponente.classList.add("hidden");
     $balanceComponente.classList.add("hidden");
@@ -143,6 +120,7 @@ $reporteButton.addEventListener("click", () => {
     $categoriaComponente.classList.add("hidden");
 })
 
+
 $ocultarFiltros.addEventListener("click", (event) => {
     event.preventDefault();
     $formFiltros.classList.toggle("hidden");// Asegura que se esconda correctamente
@@ -156,7 +134,7 @@ $ocultarFiltros.addEventListener("click", (event) => {
 })
 
 
-// ---------------------------------------------inicio codigo para atrapar datos del formulario de crear y editar ---------------------------------------------------
+// ---------------------------------------------inicio codigo para atrapar datos del formulario de crear ---------------------------------------------------
 
 
 $formCreate.addEventListener("submit", (event) => {
@@ -164,7 +142,7 @@ $formCreate.addEventListener("submit", (event) => {
 
     const nuevaOperacion = {
         id: crypto.randomUUID(),
-        name: capitalize(event.target[0].value),
+        name: event.target[0].value,
         quantity: Number(event.target[1].value),
         type: event.target[2].value,
         category: event.target[3].value,
@@ -173,44 +151,13 @@ $formCreate.addEventListener("submit", (event) => {
     }
 
     funciones.agregarOperacion(nuevaOperacion);
-    funciones.datosTodasLasOperaciones = funciones.leerLocalStorage("operaciones");
     pintarDatos(funciones.datosTodasLasOperaciones);
 
     $agregarOperacionComponente.classList.add("hidden");
     $balanceComponente.classList.remove("hidden");
     $balanceComponente.classList.add("flex");
 
-    $formCreate.reset();
 })
-
-$formEdit.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    //const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
-    //const operacionBuscada = operacionesActualizadas.find(element => element.id === event.target.id)
-
-    const operacionBuscada = $formEdit.id;
-
-    const nuevosDatos = {
-        name: event.target[0].value,
-        quantity: Number(event.target[1].value),
-        type: event.target[2].value,
-        category: event.target[3].value,
-        date: dayjs(event.target[4].value, "YYYY-MM-DD").format("DD-MM-YYYY"),
-    };
-
-    const datosModificados =  funciones.editarOperacion(operacionBuscada, nuevosDatos);
-    pintarDatos(datosModificados);
-
-    $agregarOperacionComponente.classList.add("hidden");
-    
-    $balanceComponente.classList.remove("hidden");
-    $balanceComponente.classList.add("flex");
-
-    $formEdit.classList.remove("flex")
-    $formEdit.classList.add("hidden")
-
-}); 
 
 function actualizarBalance(operaciones) {
     let totalGanancia = 0;
@@ -232,10 +179,6 @@ function actualizarBalance(operaciones) {
     $balanceTotal.textContent = totalBalance >= 0 ? `+${totalBalance}` : `${totalBalance}`;
 }
 
-function capitalize(str) {
-    if (!str) return "";
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
 
 // ---------------------------------------------inicio codigo para filtrar ---------------------------------------------------
 
@@ -304,21 +247,10 @@ $inputFilterSort.addEventListener("change", (event) => {
 
 // ---------------------------------------------inicio codigo para pintar datos ---------------------------------------------------
 
+
 function pintarDatos(arrayOperaciones) {
 
     $listOperaciones.innerHTML = "";
-
-    actualizarBalance(arrayOperaciones);
-
-    if (arrayOperaciones.length === 0) {
-        $panelSinOperaciones.classList.remove("hidden");
-        $panelConOperaciones.classList.add("hidden");
-        return; // Sale de la función sin pintar ninguna operación
-    } else {
-        // Si hay operaciones, asegúrate de ocultar el panel
-        $panelSinOperaciones.classList.add("hidden");
-        $panelConOperaciones.classList.remove("hidden");
-    }
 
     for (const operacion of arrayOperaciones) {
 
@@ -348,66 +280,27 @@ function pintarDatos(arrayOperaciones) {
     }
 
 
-    const $$arrayButtonsEdit = $$(".button-edit")
-    const $$arraybuttonsDelete = $$(".button-delete")
-
-
-    function editarEliminarOperaciones() {
-        $$arraybuttonsDelete.forEach(button => {
-            button.addEventListener("click", (event) => {
-                console.log("holaaaaaa")
-                const idEliminar = event.target.id;
-                funciones.eliminarOperacion(idEliminar); 
-    
-                const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
-                pintarDatos(operacionesActualizadas);
-            });
-        });
-    
-        $$arrayButtonsEdit.forEach(button => {
-            button.addEventListener("click", (event)=> {
-                console.log("chauuuuuu")
-                $balanceComponente.classList.remove("flex")
-                $balanceComponente.classList.add("hidden")
-                
-                $formEdit.classList.remove("hidden")
-    
-                const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
-                const operacionBuscada = operacionesActualizadas.find(element => element.id === event.target.id)
-
-                $inputNameEdit.value = operacionBuscada.name
-                $inputMontoEdit.value = operacionBuscada.quantity
-                $inputTypeEdit.value = operacionBuscada.type
-                $inputDateEdit.value = dayjs(operacionBuscada.date,"DD-MM-YYYY").format("YYYY-MM-DD")
-                
-                $formEdit.id = operacionBuscada.id
-            })
-        })
-    }
-
-   
-    editarEliminarOperaciones()
-
     actualizarBalance(arrayOperaciones);
 }
 
 
-//-----------------------Actualizar Reporte-----------------------//
+//-----------------------Actualizar Reporte--------------------------------//
 
 
 
 //---monto mes mayor gasto----//
 
 const gastosPorMes = funciones.datosTodasLasOperaciones.reduce((acc, operacion) => {
-    const mesAnio = dayjs(operacion.date, "YYYY-MM-DD").format("DD-MM-YYYY");
+    const mesAnio = dayjs(operacion.datze, "YYYY-MM-DD").format("DD-MM-YYYY");
     if (!acc[mesAnio]) {
         acc[mesAnio] = 0;
+
+
     }
     acc[mesAnio] += operacion.quantity;
 
     return acc;
 }, {});
-
 
 const mesMayorGasto = Object.keys(gastosPorMes).reduce((maxMes, mesActual) => {
     if (gastosPorMes[mesActual] > gastosPorMes[maxMes]) {
@@ -420,9 +313,9 @@ const mesMayorGasto = Object.keys(gastosPorMes).reduce((maxMes, mesActual) => {
 
 const actualizarReportes = () => {
     const datos = funciones.leerLocalStorage("operaciones")
-    const todasLasCategorias = datos.filter(elem => elem.type === "category")
+
     //-- Categoria con mayor ganancia- y su monto-//
-    const Ganancia = datos.filter(elem => elem.type === "Ganancia");
+    const Ganancia = funciones.filtrarPorTipo("Ganancia");
     const totalGanancia = Ganancia.reduce((acc, curr) => acc + curr.quantity, 0)
     const categoriasGanancia = Ganancia.reduce((acc, curr) => {
         if (!acc[curr.category]) {
@@ -441,8 +334,7 @@ const actualizarReportes = () => {
     const montoMayorGanancia = categoriasGanancia[categoriaMayorGanancia];
 
     //-- mes con mas  Gasto en Reporte-//
-    const Gasto = datos.filter(elem => elem.type === "Gasto");
-
+    const Gasto = funciones.filtrarPorTipo("Gasto");
     const totalGasto = Gasto.reduce((acc, curr) => acc + curr.quantity, 0)
     const categoriasGasto = Gasto.reduce((acc, curr) => {
         if (!acc[curr.category]) {
@@ -454,6 +346,7 @@ const actualizarReportes = () => {
     //----categoria con mayor gasto y su monto---//
 
     const categoriaMayorGasto = Object.keys(categoriasGasto).reduce((maxCategory, currentCategory) => {
+
         if (categoriasGasto[currentCategory] > categoriasGasto[maxCategory]) {
             return currentCategory;
         }
@@ -494,7 +387,8 @@ const actualizarReportes = () => {
 
     // mes con mayor  ganancia- en Reporte--//
     const operaciones = [];
-    operaciones.filter(op => op.type === "Ganancia").forEach(op => {
+    Ganancia.filter(op => op.type === "Ganancia").forEach(op => {
+
         const mes = dayjs(op.date, "DD-MM-YYYY").format("YYYY-MM");
 
         if (!gananciasPorMes[mes]) {
@@ -520,6 +414,10 @@ const actualizarReportes = () => {
 
 
     const mesFormateado = dayjs(mesConMayorGanancia.mes + "-01", "YYYY-MM-DD").format("DD/MM/YYYY");
+
+
+
+
     //---------Pintar ---Reporte----------------//
 
     $reporteComponente.innerHTML = `<!-- componente de reportes cuando hay operaciones -->
@@ -530,7 +428,7 @@ const actualizarReportes = () => {
          <!-- título resumen --> 
          <div class="mb-8">
              <h2 class="text-2xl font-bold">
-             ${mesMayorGasto}</h2>
+             Reporte</h2>
          </div>
 
          <!-- categoria con mayor ganancia -->
@@ -627,7 +525,7 @@ const actualizarReportes = () => {
         
          <!-- fila para reemplazar -->
          <div class="flex flex-row mb-6">
-             <span class="w-1/4 flex justify-start"></span>
+             <span class="w-1/4 flex justify-start">${mesFormateado}</span>
              <span class="w-1/4 flex justify-end"></span>
              <span class="w-1/4 flex justify-end">Gastos</span>
              <span class="w-1/4 flex justify-end">Balance</span>
@@ -643,7 +541,7 @@ const actualizarReportes = () => {
 
 //--- crear o eliminar categorias en Categorias--//
 
-const categorias = [];
+/*const categorias = [];
 
 const $formCreateCategoria = document.getElementById("formCreateCategoria");
 const $categoriaInput = document.getElementById("categoriaInput");
@@ -662,13 +560,12 @@ $formCreateCategoria.addEventListener("submit", (event) => {
     }
 
 });
-
 function pintarCategorias() {
 
     $listaCategorias.innerHTML = "";
     let htmlCategorias = "";
     categorias.forEach((categoria, index) => {
-        htmlCategorias += `
+        $listaCategorias.innerHTML += `
             <li class="flex justify-between items-center border p-2 rounded mb-2">
                 <span class="text-xl">${categoria}</span>
                 <div class="flex gap-4">
@@ -676,8 +573,24 @@ function pintarCategorias() {
                     <a href="#" class="eliminar" data-index="${index}">Eliminar</a>
                 </div>
             </li>
+            
         `;
+
     });
+    $inputFilterCategory.innerHTML = ` <option value="Todos">Todos</option>
+    <option value="Comida">Comida</option>
+    <option value="Servicios">Servicios</option>
+    <option value="Salidas">Salidas</option>
+    <option value="Educación">Educación</option>
+    <option value="Transporte">Transporte</option>
+    <option value="Trabajo">Trabajo</option>`
+    categorias.forEach((categoria, index) => {
+
+        $inputFilterCategory.innerHTML += ` <select id="filter-category" class="h-10 rounded-lg border-rojo border px-4" name="" id="">
+    
+    <option value="Trabajo">${categoria}</option>
+</select>`
+    })
 
     $listaCategorias.innerHTML += htmlCategorias;
 
@@ -724,7 +637,12 @@ function eliminarCategoria(index) {
         pintarCategorias();
     }
 }
-pintarCategorias();
+pintarCategorias()
+
+*/
+///----pintar totales por mes---//
+const $listaTotalesPorMes = $("#listaTotalesPorMes")
+
 
 
 
