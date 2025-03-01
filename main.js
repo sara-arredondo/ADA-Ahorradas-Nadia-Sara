@@ -67,11 +67,11 @@ const $panelConOperaciones = $("#panel-con-operaciones")
 
 // ---------------------------------------------inicio codigo para ocultar menu hamburguesa mobile y cambio de icono  ---------------------------------------------------
 
+function menuHamburguesa() {
+    const menuIconSrc = "./assets/svg/menu.svg";  // Ícono de menú hamburguesa
+    const closeIconSrc = "./assets/svg/menu-close.svg"; // Ícono de cerrar
 
-const menuIconSrc = "./assets/svg/menu.svg";  // Ícono de menú hamburguesa
-const closeIconSrc = "./assets/svg/menu-close.svg"; // Ícono de cerrar
-
-$menuIconMobile.addEventListener("click", () => {
+    $menuIconMobile.addEventListener("click", () => {
     $containerButtonsMenu.classList.toggle("hidden");
 
     if ($containerButtonsMenu.classList.contains("hidden")) {
@@ -79,7 +79,9 @@ $menuIconMobile.addEventListener("click", () => {
     } else {
         $menuIconMobile.src = closeIconSrc; // Muestra el icono de cerrar
     }
-})
+    })
+
+}
 
 // ---------------------------------------------inicio codigo para intercambio de componentes  ---------------------------------------------------
 
@@ -316,7 +318,6 @@ $inputFilterCategory.addEventListener("input", (event) => {
 
 // ---------------------------------------------inicio codigo para crear categorias ---------------------------------------------------
 
-const categoriasPredeterminadas = ["Trabajo", "Educación", "Transporte", "Comida", "Salida"];
 
 
 $formCreateCategoria.addEventListener("submit", (event) => {
@@ -378,6 +379,9 @@ $buttonCancelarEditCategoria.addEventListener("click", (event)=> {
     $categoriaComponente.classList.remove("hidden");
     $categoriaComponente.classList.add("flex");
 })
+
+const categoriasPredeterminadas = ["Trabajo", "Educación", "Transporte", "Comida", "Salida"];
+
 
 function cargarCategorias() {
     const categorias = funciones.obtenerCategorias(categoriasPredeterminadas);
@@ -576,5 +580,6 @@ window.onload = () => {
     pintarCategorias(funciones.obtenerCategorias(categoriasPredeterminadas)); 
     actualizarCategoriasFormCreateEditFilter(funciones.obtenerCategorias(categoriasPredeterminadas));  
     cargarCategorias()
+    menuHamburguesa()
     
 }
