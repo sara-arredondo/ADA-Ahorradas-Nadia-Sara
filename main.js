@@ -388,7 +388,7 @@ const actualizarReportes = () => {
     // mes con mayor  ganancia- en Reporte--//
     const operaciones = [];
     Ganancia.filter(op => op.type === "Ganancia").forEach(op => {
-        console.log(operaciones)
+
         const mes = dayjs(op.date, "DD-MM-YYYY").format("YYYY-MM");
 
         if (!gananciasPorMes[mes]) {
@@ -415,7 +415,7 @@ const actualizarReportes = () => {
 
     const mesFormateado = dayjs(mesConMayorGanancia.mes + "-01", "YYYY-MM-DD").format("DD/MM/YYYY");
 
-    //-----------totales por categoria----//
+
 
 
     //---------Pintar ---Reporte----------------//
@@ -428,7 +428,7 @@ const actualizarReportes = () => {
          <!-- título resumen --> 
          <div class="mb-8">
              <h2 class="text-2xl font-bold">
-             ${mesMayorGasto}</h2>
+             Reporte</h2>
          </div>
 
          <!-- categoria con mayor ganancia -->
@@ -525,7 +525,7 @@ const actualizarReportes = () => {
         
          <!-- fila para reemplazar -->
          <div class="flex flex-row mb-6">
-             <span class="w-1/4 flex justify-start"></span>
+             <span class="w-1/4 flex justify-start">${mesFormateado}</span>
              <span class="w-1/4 flex justify-end"></span>
              <span class="w-1/4 flex justify-end">Gastos</span>
              <span class="w-1/4 flex justify-end">Balance</span>
@@ -541,7 +541,7 @@ const actualizarReportes = () => {
 
 //--- crear o eliminar categorias en Categorias--//
 
-const categorias = [];
+/*const categorias = [];
 
 const $formCreateCategoria = document.getElementById("formCreateCategoria");
 const $categoriaInput = document.getElementById("categoriaInput");
@@ -560,7 +560,6 @@ $formCreateCategoria.addEventListener("submit", (event) => {
     }
 
 });
-
 function pintarCategorias() {
 
     $listaCategorias.innerHTML = "";
@@ -578,7 +577,7 @@ function pintarCategorias() {
         `;
 
     });
-    $inputFilterCategory.innerHTML =` <option value="Todos">Todos</option>
+    $inputFilterCategory.innerHTML = ` <option value="Todos">Todos</option>
     <option value="Comida">Comida</option>
     <option value="Servicios">Servicios</option>
     <option value="Salidas">Salidas</option>
@@ -638,7 +637,12 @@ function eliminarCategoria(index) {
         pintarCategorias();
     }
 }
-pintarCategorias();
+pintarCategorias()
+
+*/
+///----pintar totales por mes---//
+const $listaTotalesPorMes = $("#listaTotalesPorMes")
+
 
 
 
