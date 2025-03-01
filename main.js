@@ -103,7 +103,7 @@ $buttonCancelarOperacion.addEventListener("click", (event) => {
 //Boton categoria
 $categoriaButton.addEventListener("click", () => {
     $categoriaComponente.classList.remove("hidden");
-    $balanceComponente.classList.add("flex"); 
+    $balanceComponente.classList.add("flex");
 
     $agregarOperacionComponente.classList.add("hidden");
     $balanceComponente.classList.add("hidden");
@@ -294,11 +294,11 @@ const gastosPorMes = funciones.datosTodasLasOperaciones.reduce((acc, operacion) 
     const mesAnio = dayjs(operacion.datze, "YYYY-MM-DD").format("DD-MM-YYYY");
     if (!acc[mesAnio]) {
         acc[mesAnio] = 0;
-        
-  
+
+
     }
     acc[mesAnio] += operacion.quantity;
-   
+
     return acc;
 }, {});
 
@@ -313,7 +313,7 @@ const mesMayorGasto = Object.keys(gastosPorMes).reduce((maxMes, mesActual) => {
 
 const actualizarReportes = () => {
     const datos = funciones.leerLocalStorage("operaciones")
-    
+
     //-- Categoria con mayor ganancia- y su monto-//
     const Ganancia = funciones.filtrarPorTipo("Ganancia");
     const totalGanancia = Ganancia.reduce((acc, curr) => acc + curr.quantity, 0)
@@ -346,7 +346,7 @@ const actualizarReportes = () => {
     //----categoria con mayor gasto y su monto---//
 
     const categoriaMayorGasto = Object.keys(categoriasGasto).reduce((maxCategory, currentCategory) => {
-        
+
         if (categoriasGasto[currentCategory] > categoriasGasto[maxCategory]) {
             return currentCategory;
         }
@@ -387,8 +387,8 @@ const actualizarReportes = () => {
 
     // mes con mayor  ganancia- en Reporte--//
     const operaciones = [];
-   Ganancia.filter(op => op.type === "Ganancia").forEach(op => {
-    console.log(operaciones)
+    Ganancia.filter(op => op.type === "Ganancia").forEach(op => {
+        console.log(operaciones)
         const mes = dayjs(op.date, "DD-MM-YYYY").format("YYYY-MM");
 
         if (!gananciasPorMes[mes]) {
@@ -416,8 +416,8 @@ const actualizarReportes = () => {
     const mesFormateado = dayjs(mesConMayorGanancia.mes + "-01", "YYYY-MM-DD").format("DD/MM/YYYY");
 
     //-----------totales por categoria----//
-    
-   
+
+
     //---------Pintar ---Reporte----------------//
 
     $reporteComponente.innerHTML = `<!-- componente de reportes cuando hay operaciones -->
@@ -562,7 +562,7 @@ $formCreateCategoria.addEventListener("submit", (event) => {
 });
 
 function pintarCategorias() {
-   
+
     $listaCategorias.innerHTML = "";
     let htmlCategorias = "";
     categorias.forEach((categoria, index) => {
@@ -576,15 +576,23 @@ function pintarCategorias() {
             </li>
             
         `;
-        
+
     });
-    categorias.forEach((categoria,index)=>{
-    $inputFilterCategory.innerHTML +=` <select id="filter-category" class="h-10 rounded-lg border-rojo border px-4" name="" id="">
+    $inputFilterCategory.innerHTML =` <option value="Todos">Todos</option>
+    <option value="Comida">Comida</option>
+    <option value="Servicios">Servicios</option>
+    <option value="Salidas">Salidas</option>
+    <option value="Educación">Educación</option>
+    <option value="Transporte">Transporte</option>
+    <option value="Trabajo">Trabajo</option>`
+    categorias.forEach((categoria, index) => {
+
+        $inputFilterCategory.innerHTML += ` <select id="filter-category" class="h-10 rounded-lg border-rojo border px-4" name="" id="">
     
     <option value="Trabajo">${categoria}</option>
 </select>`
-})  
-   
+    })
+
     $listaCategorias.innerHTML += htmlCategorias;
 
     agregarEventosCategorias();
