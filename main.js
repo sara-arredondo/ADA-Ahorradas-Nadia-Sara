@@ -300,6 +300,7 @@ $inputFilterSort.addEventListener("change", (event) => {
     } else if (sortOperaciones === "descendente") {
         nuevoArraySort.sort((a, b) => b.name.localeCompare(a.name))
     }
+
     pintarDatos(nuevoArraySort);
 });
 
@@ -318,7 +319,7 @@ $inputFilterCategory.addEventListener("input", (event) => {
 
 // ---------------------------------------------inicio codigo para crear categorias ---------------------------------------------------
 
-
+const categoriasPredeterminadas = ["Trabajo", "Educación", "Transporte", "Comida", "Salida"];
 
 $formCreateCategoria.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -379,8 +380,6 @@ $buttonCancelarEditCategoria.addEventListener("click", (event)=> {
     $categoriaComponente.classList.remove("hidden");
     $categoriaComponente.classList.add("flex");
 })
-
-const categoriasPredeterminadas = ["Trabajo", "Educación", "Transporte", "Comida", "Salida"];
 
 
 function cargarCategorias() {
@@ -481,6 +480,7 @@ function actualizarCategoriasFormCreateEditFilter(categorias) {
     })
         
 }
+
 
 // ---------------------------------------------inicio codigo para pintar datos ---------------------------------------------------
 
