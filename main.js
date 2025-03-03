@@ -22,8 +22,8 @@ const $ocultarFiltros = $("#ocultar-filtros")
 const $balanceComponente = $("#balance-componente");
 const $agregarOperacionComponente = $("#agregar-operacion-componente");
 const $categoriaComponente = $("#categoria-componente");
-
 const $formFiltros = $("#form-filtros")
+const $reporteComponente = $("#reporte-componente");
 
 const $menuIconMobile = $("#menu-icon-mobile");
 const $containerButtonsMenu = $("#container-menu-buttons");
@@ -33,30 +33,40 @@ const $buttonCancelarOperacion = $("#button-cancelar-operacion")
 
 const $listOperaciones = $("#list-operaciones");
 
-const $contenedorFilterCategory = $("#contenedor-filter-categoria")
-
 const $inputFilterType = $("#filter-type")
-const $inputFilterCategory = $("#filter-category")
+
 const $inputFilterDate = $("#filter-date")
 const $inputFilterSort = $("#filter-sort")
+
+
+const $formCreateCategoria = $("#form-create-categoria");
+const $inputCreateCategoria = $("#create-category")
+const $categoryOperation = $("#category-operation")
+const $listCategorias = $("#list-categorias")
+const $inputFilterCategory = $("#filter-category")
+const $editCategoryFormEditOperacion = $("#edit-category-operacion")
+
+const $editCategoriaComponente = $("#edit-categoria-componente")
+const $formEditCategoria = $("#form-edit-categoria")
+const $inputEditCategoria = $("#input-edit-categoria")
+const $buttonCancelarEditCategoria = $("#button-cancelar-edit-categoria")
 
 const $balanceGanancia = $("#balance-ganancia")
 const $balanceGasto = $("#balance-gasto")
 const $balanceTotal = $("#balance-total")
 
-//---selecciones reportes---//
-const $reporteComponente = $("#reporte-componente");
-//---selecciones
 
-const $$botonEditar = $$(".b")
+const $panelSinOperaciones = $("#panel-sin-operaciones")
+const $panelConOperaciones = $("#panel-con-operaciones")
+
 
 // ---------------------------------------------inicio codigo para ocultar menu hamburguesa mobile y cambio de icono  ---------------------------------------------------
 
+function menuHamburguesa() {
+    const menuIconSrc = "./assets/svg/menu.svg";  // Ícono de menú hamburguesa
+    const closeIconSrc = "./assets/svg/menu-close.svg"; // Ícono de cerrar
 
-const menuIconSrc = "./assets/svg/menu.svg";  // Ícono de menú hamburguesa
-const closeIconSrc = "./assets/svg/menu-close.svg"; // Ícono de cerrar
-
-$menuIconMobile.addEventListener("click", () => {
+    $menuIconMobile.addEventListener("click", () => {
     $containerButtonsMenu.classList.toggle("hidden");
 
     if ($containerButtonsMenu.classList.contains("hidden")) {
@@ -64,7 +74,9 @@ $menuIconMobile.addEventListener("click", () => {
     } else {
         $menuIconMobile.src = closeIconSrc; // Muestra el icono de cerrar
     }
-})
+    })
+
+}
 
 // ---------------------------------------------inicio codigo para intercambio de componentes  ---------------------------------------------------
 
@@ -145,7 +157,7 @@ $formCreate.addEventListener("submit", (event) => {
         name: event.target[0].value,
         quantity: Number(event.target[1].value),
         type: event.target[2].value,
-        category: event.target[3].value,
+        category: capitalize(event.target[3].value),
         date: dayjs(event.target[4].value, "YYYY-MM-DD").format("DD-MM-YYYY"),
 
     }
@@ -199,7 +211,6 @@ $inputFilterDate.addEventListener("change", (event) => {
     const fechaSeleccionada = dayjs(event.target.value, "YYYY-MM-DD");
     console.log("Fecha seleccionada:", fechaSeleccionada.format("DD-MM-YYYY"));
 
-    // Filtra las operaciones que sean de la fecha seleccionada o posteriores
     const operacionesFiltradasDate = funciones.datosTodasLasOperaciones.filter(operacion => {
         const fechaOperacion = dayjs(operacion.date, "DD-MM-YYYY");
         console.log("Comparando operación:", operacion.date, "->", fechaOperacion.format("DD-MM-YYYY"));
@@ -238,11 +249,186 @@ $inputFilterSort.addEventListener("change", (event) => {
     } else if (sortOperaciones === "descendente") {
         nuevoArraySort.sort((a, b) => b.name.localeCompare(a.name))
     }
+
     pintarDatos(nuevoArraySort);
 });
 
 
+$inputFilterCategory.addEventListener("input", (event) => {
 
+    if (event.target.value !== "Todos") {
+        const operacionesFiltradasCategory = funciones.datosTodasLasOperaciones.filter(element => element.category === event.target.value)
+        pintarDatos(operacionesFiltradasCategory)
+    } else {
+        pintarDatos(funciones.datosTodasLasOperaciones)
+    }
+
+})
+
+
+// ---------------------------------------------inicio codigo para crear categorias ---------------------------------------------------
+
+const categoriasPredeterminadas = ["Trabajo", "Educación", "Transporte", "Comida", "Salida"];
+
+$formCreateCategoria.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const nuevaCategoria = capitalize($inputCreateCategoria.value);
+    
+    if (nuevaCategoria !== "") {
+        funciones.agregarCategoria(nuevaCategoria, categoriasPredeterminadas);
+        
+        pintarCategorias();
+        actualizarCategoriasFormCreateEditFilter();
+        $inputCreateCategoria.value = ""; 
+    }
+});
+
+$formEditCategoria.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const categoriaEditada = capitalize($inputEditCategoria.value);
+    const indexEditar = $editCategoriaComponente.dataset.index;
+
+    if (categoriaEditada !== "") {
+
+        const categoriasGuardadas = funciones.obtenerCategorias(categoriasPredeterminadas);
+        const categoriaAntigua = categoriasGuardadas[indexEditar];
+
+        funciones.editarCategoria(indexEditar, categoriaEditada, categoriasPredeterminadas);
+
+        let operaciones = funciones.leerLocalStorage("operaciones");
+        operaciones = operaciones.map(operacion => {
+            if (operacion.category === categoriaAntigua) {
+                return { ...operacion, category: categoriaEditada };
+            }
+            return operacion;
+        });
+        funciones.guardarLocalStorage("operaciones", operaciones);
+        funciones.datosTodasLasOperaciones = operaciones;
+        
+        pintarCategorias();
+        actualizarCategoriasFormCreateEditFilter();
+        pintarDatos(operaciones);
+        
+        $inputEditCategoria.value = ""; 
+
+        $editCategoriaComponente.classList.remove("flex")
+        $editCategoriaComponente.classList.add("hidden")
+
+        $categoriaComponente.classList.remove("hidden")
+        $categoriaComponente.classList.add("flex")
+    }
+})
+
+$buttonCancelarEditCategoria.addEventListener("click", (event)=> {
+    event.preventDefault();
+
+    $editCategoriaComponente.classList.add("hidden");
+
+    $categoriaComponente.classList.remove("hidden");
+    $categoriaComponente.classList.add("flex");
+})
+
+
+function cargarCategorias() {
+    const categorias = funciones.obtenerCategorias(categoriasPredeterminadas);
+    pintarCategorias(categorias); 
+    actualizarCategoriasFormCreateEditFilter(categorias); 
+}
+
+function pintarCategorias() {
+
+    $listCategorias.innerHTML = "";
+
+    const categoriasGuardadas = funciones.obtenerCategorias(categoriasPredeterminadas);
+
+    $listCategorias.innerHTML = "";
+
+    categoriasGuardadas.forEach((categoria, index) => {
+        $listCategorias.innerHTML += `
+            <div class="flex justify-between items-center border-b border-azul p-4">
+                <span class="border border-azul p-2 rounded-full text-xs">${categoria}</span>
+                <div class="flex gap-2">
+                    <button class="text-blue-600 hover:underline button-editar-category" data-index="${index}">Editar</button>
+                    <button class="text-red-600 hover:underline button-eliminar-category" data-index="${index}">Eliminar</button>
+                </div>
+            </div>
+        `;
+    });
+
+    const $$arrayButtonEditCategory = $$(".button-editar-category")
+    const $$arrayButtonDeleteCategory = $$(".button-eliminar-category")
+
+    function editarEliminarCategorias() {
+        $$arrayButtonDeleteCategory.forEach(button => {
+            button.addEventListener("click", () => {
+                const indexEliminar = button.dataset.index;
+
+                const categoriasGuardadas = funciones.obtenerCategorias(categoriasPredeterminadas);
+                const categoriaEliminada = categoriasGuardadas[indexEliminar];
+
+                funciones.eliminarCategoria(indexEliminar, categoriasPredeterminadas)
+
+                let operaciones = funciones.leerLocalStorage("operaciones");
+                operaciones = operaciones.filter(operacion => operacion.category !== categoriaEliminada);
+
+                funciones.guardarLocalStorage("operaciones", operaciones);
+                funciones.datosTodasLasOperaciones = operaciones;
+
+                pintarCategorias();
+                actualizarCategoriasFormCreateEditFilter(funciones.obtenerCategorias(categoriasPredeterminadas));
+                pintarDatos(operaciones);
+            })
+        })
+
+        $$arrayButtonEditCategory.forEach(button => {
+            button.addEventListener("click", (event) => {
+                console.log("pollo maligno")
+                $categoriaComponente.classList.remove("flex")
+                $categoriaComponente.classList.add("hidden")
+
+                $editCategoriaComponente.classList.remove("hidden")
+
+                const indexEditar = button.dataset.index;
+                $editCategoriaComponente.dataset.index = indexEditar;
+
+                const categoriasGuardadas = funciones.obtenerCategorias(categoriasPredeterminadas);
+                const categoriaEditada = categoriasGuardadas[indexEditar];
+
+                $inputEditCategoria.value = categoriaEditada;
+            })
+        })
+    }
+
+    editarEliminarCategorias()
+
+}
+
+function actualizarCategoriasFormCreateEditFilter(categorias) {
+    if (!categorias) {
+        categorias = funciones.obtenerCategorias(categoriasPredeterminadas);
+        console.log("holaaa")
+    }
+    $categoryOperation.innerHTML = ""; 
+    categorias.forEach(categoria => {
+        const optionEtiqueta = `<option value="${categoria}">${categoria}</option>`;
+        $categoryOperation.innerHTML += optionEtiqueta; 
+    });
+
+    $inputFilterCategory.innerHTML = `<option value="Todos">Todos</option>`;
+    categorias.forEach(categoria => {
+        const optionEtiqueta = `<option value="${categoria}">${categoria}</option>`
+        $inputFilterCategory.innerHTML += optionEtiqueta;
+    })
+
+    $editCategoryFormEditOperacion.innerHTML = `<option value="Todos">Todos</option>`;
+    categorias.forEach(categoria => {
+        const optionEtiqueta = `<option value="${categoria}">${categoria}</option>`
+        $editCategoryFormEditOperacion.innerHTML += optionEtiqueta;
+    })
+        
+}
 
 
 // ---------------------------------------------inicio codigo para pintar datos ---------------------------------------------------
@@ -272,7 +458,7 @@ function pintarDatos(arrayOperaciones) {
                         <span class="w-1/3  font-bold flex lg:justify-end xl:justify-end md:justify-start ${colorMonto}">${signoMonto}${operacion.quantity}</span>
                         <div class="w-1/3 flex justify-end space-x-2">
                             <button id=${operacion.id} class="button-edit text-blue-600 hover:underline">Editar</button>
-                            <button id=${operacion.id} class="button-delete text-blue-600 hover:underline">Eliminar</button>
+                            <button id=${operacion.id} class="button-delete text-red-600 hover:underline">Eliminar</button>
                         </div>
                     </div>
                 </div>
@@ -282,6 +468,8 @@ function pintarDatos(arrayOperaciones) {
 
     actualizarBalance(arrayOperaciones);
 }
+
+
 
 
 //-----------------------Actualizar Reporte--------------------------------//
@@ -539,124 +727,14 @@ const actualizarReportes = () => {
 
 }
 
-//--- crear o eliminar categorias en Categorias--//
-
-/*const categorias = [];
-
-const $formCreateCategoria = document.getElementById("formCreateCategoria");
-const $categoriaInput = document.getElementById("categoriaInput");
-const $listaCategorias = document.getElementById("listaCategorias");
-
-$formCreateCategoria.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    const nuevaCategoria = $categoriaInput.value.trim();
-    if (nuevaCategoria !== "") {
-        categorias.push(nuevaCategoria);
-        $categoriaInput.value = "";
-        pintarCategorias();
-    } else {
-        alert("Por favor, ingresa una categoría válida.");
-    }
-
-});
-function pintarCategorias() {
-
-    $listaCategorias.innerHTML = "";
-    let htmlCategorias = "";
-    categorias.forEach((categoria, index) => {
-        $listaCategorias.innerHTML += `
-            <li class="flex justify-between items-center border p-2 rounded mb-2">
-                <span class="text-xl">${categoria}</span>
-                <div class="flex gap-4">
-                    <a href="#" class="editar" data-index="${index}">Editar</a>
-                    <a href="#" class="eliminar" data-index="${index}">Eliminar</a>
-                </div>
-            </li>
-            
-        `;
-
-    });
-    $inputFilterCategory.innerHTML = ` <option value="Todos">Todos</option>
-    <option value="Comida">Comida</option>
-    <option value="Servicios">Servicios</option>
-    <option value="Salidas">Salidas</option>
-    <option value="Educación">Educación</option>
-    <option value="Transporte">Transporte</option>
-    <option value="Trabajo">Trabajo</option>`
-    categorias.forEach((categoria, index) => {
-
-        $inputFilterCategory.innerHTML += ` <select id="filter-category" class="h-10 rounded-lg border-rojo border px-4" name="" id="">
-    
-    <option value="Trabajo">${categoria}</option>
-</select>`
-    })
-
-    $listaCategorias.innerHTML += htmlCategorias;
-
-    agregarEventosCategorias();
-}
-
-//---agregar nueva categoria a filtro---//
-
-
-// Función para editar una categoría en Categorias--//
-
-function agregarEventosCategorias() {
-
-    const botonesEditar = document.querySelectorAll('.editar');
-    botonesEditar.forEach(boton => {
-        boton.addEventListener('click', (event) => {
-            event.preventDefault();
-            const index = event.target.getAttribute('data-index');
-            editarCategoria(index);
-        });
-    });
-    const botonesEliminar = document.querySelectorAll('.eliminar');
-    botonesEliminar.forEach(boton => {
-        boton.addEventListener('click', (event) => {
-            event.preventDefault();
-            const index = event.target.getAttribute('data-index');
-            eliminarCategoria(index);
-        });
-    });
-}
-function editarCategoria(index) {
-
-    const nuevaCategoria = prompt("Editar categoría:", categorias[index]);
-    if (nuevaCategoria !== null && nuevaCategoria.trim() !== "") {
-        categorias[index] = nuevaCategoria.trim();
-        pintarCategorias();
-    }
-}
-
-// Función para eliminar una categoría//
-function eliminarCategoria(index) {
-    if (confirm("¿Estás seguro de que quieres eliminar esta categoría?")) {
-        categorias.splice(index, 1);
-        pintarCategorias();
-    }
-}
-pintarCategorias()
-
-*/
-///----pintar totales por mes---//
-const $listaTotalesPorMes = $("#listaTotalesPorMes")
-
-
-
 
 window.onload = () => {
     funciones.datosTodasLasOperaciones = funciones.leerLocalStorage("operaciones");
-
-    pintarDatos(funciones.datosTodasLasOperaciones)
-    actualizarReportes()
-
-    pintarCategorias()
-    agregarEventosCategorias()
-
+    
+    pintarDatos(funciones.datosTodasLasOperaciones); 
+    pintarCategorias(funciones.obtenerCategorias(categoriasPredeterminadas)); 
+    actualizarCategoriasFormCreateEditFilter(funciones.obtenerCategorias(categoriasPredeterminadas));  
+    cargarCategorias()
+    menuHamburguesa()
+    
 }
-
-
-
-

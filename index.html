@@ -119,34 +119,27 @@
    
                        <!-- input desplegable por categoria -->
                        <div  class="flex flex-col mb-4">
-                           <label class="mb-2" for="">Categoria</label>
-                           <select id="filter-category" class="h-10 rounded-lg border-rojo border px-4" name="" id="">
-                               <option value="Todos">Todos</option>
-                               <option value="Comida">Comida</option>
-                               <option value="Servicios">Servicios</option>
-                               <option value="Salidas">Salidas</option>
-                               <option value="Educación">Educación</option>
-                               <option value="Transporte">Transporte</option>
-                               <option value="Trabajo">Trabajo</option>
-                           </select>
+                            <label class="mb-2" for="">Categoria</label>
+                            <select id="filter-category" class="h-10 rounded-lg border-rojo border px-4" name="" id="">
+                            </select>
                        </div>
    
                        <!-- input tipo date -->
                        <div class="flex flex-col mb-4">
-                           <label class="mb-2" for="">Desde</label>
-                           <input id="filter-date" class="h-10 rounded-lg border-rojo border px-4" type="date">
+                            <label class="mb-2" for="">Desde</label>
+                            <input id="filter-date" class="h-10 rounded-lg border-rojo border px-4" type="date">
                        </div>
    
                        <!--input para ordenar -->
                        <div class="flex flex-col mb-4" >
-                           <label class="mb-2" for="">Ordenar por</label>
-                           <select id="filter-sort" class="h-10 rounded-lg border-rojo border px-4" name="" id="">
-                               <option value="mas-reciente">Más reciente</option>
-                               <option value="menos-reciente">Menos reciente</option>
-                               <option value="mayor-monto">Mayor monto</option>
-                               <option value="menor-monto">Menor monto</option>
-                               <option value="ascendente">A/Z</option>
-                               <option value="descendente">Z/A</option>
+                            <label class="mb-2" for="">Ordenar por</label>
+                            <select id="filter-sort" class="h-10 rounded-lg border-rojo border px-4" name="" id="">
+                                <option value="mas-reciente">Más reciente</option>
+                                <option value="menos-reciente">Menos reciente</option>
+                                <option value="mayor-monto">Mayor monto</option>
+                                <option value="menor-monto">Menor monto</option>
+                                <option value="ascendente">A/Z</option>
+                                <option value="descendente">Z/A</option>
                            </select>
                        </div>
                        
@@ -233,14 +226,9 @@
 
                     <!-- input para seleccionar la categoria del gasto -->
                     <div class="flex flex-col mb-4">
-                        <label class="mb-2" for="">Categoria</label>
-                        <select name="" id="category-operation" class="h-10 rounded-lg border-rojo border px-4">
-                            <option value="Comida">Comida</option>
-                            <option value="Servicios">Servicios</option>
-                            <option value="Salidas">Salidas</option>
-                            <option value="Educación">Educación</option>
-                            <option value="Transporte">Transporte</option>
-                            <option value="Trabajo">Trabajo</option>
+
+                        <label class="mb-2" for="category-operation">Categoria</label>
+                        <select name="category-operation" id="category-operation" class="h-10 rounded-lg border-rojo border px-4">
                         </select>
                     </div>
 
@@ -295,13 +283,8 @@
                 <!-- input para seleccionar la categoria del gasto -->
                 <div class="flex flex-col mb-4">
                     <label class="mb-2" for="">Categoria</label>
-                    <select name="" id="" class="h-10 rounded-lg border-rojo border px-4">
-                        <option value="comida">Comida</option>
-                        <option value="servicios">Servicios</option>
-                        <option value="educacion">Educación</option>
-                        <option value="transporte">Transporte</option>
-                        <option value="trabajo">Trabajo</option>
-                        <option value="zapatos">Zapatos</option>
+
+                    <select name="" id="edit-category-operacion" class="h-10 rounded-lg border-rojo border px-4">
                     </select>
                 </div>
 
@@ -322,7 +305,7 @@
         </section>
 
         <!-- componente para agregar categorias -->  
-        <section id="categoria-componente" class="h-fit shadow-lg bg-amarilloClaro rounded-lg p-8 my-8 overflow-hidden hidden">
+        <section id="categoria-componente" class=" flex flex-col h-fit shadow-lg bg-amarilloClaro rounded-lg p-8 my-8 overflow-hidden hidden">
 
             <!-- título card --> 
             <div class="mb-8">
@@ -330,30 +313,24 @@
             </div>
 
             <!-- formulario para agregar categoria -->  
-            <form id="formCreateCategoria" action="" class="w-full pb-8">
+            <form id="form-create-categoria" action="" class="w-full pb-8">
                 <label class="mb-2 block" for="nombre">Nombre</label>
                 <div class="flex items-center space-x-4">
                     <!-- Input de texto -->
-                    <input id="categoriaInput" type="text" class="h-10 flex-1 rounded-lg border border-rojo px-4 w-2/3">
+                    <input id="create-category" placeholder="Ingresa el nombre de la categoria que quieres crear" type="text" class="h-10 flex-1 rounded-lg border border-rojo px-4 w-2/3">
                     <!-- Botón de submit -->
                     <input type="submit" value="Agregar" class="h-10 py-2.5 px-6 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-rojo">
                 </div>
             </form>
 
-            <div id="" class="flex justify-between flex-col">
-                    
-                <span class="border border-azul p-2 rounded-full text-xs">etiqueta</span>
-                <div class="flex gap-4">
-                    <a href="">editar</a>
-                    <a href="">eliminar</a>
-                </div>
 
+            <div id="list-categorias" class="flex justify-between flex-col">
             </div>
 
         </section>
 
         <!-- componente para editar categorias -->
-        <section class="h-fit shadow-lg bg-amarilloClaro rounded-lg p-8 my-8 overflow-hidden hidden">
+        <section id="edit-categoria-componente" class="h-fit shadow-lg bg-amarilloClaro rounded-lg p-8 my-8 overflow-hidden hidden">
 
             <!-- título card --> 
             <div class="mb-8">
@@ -361,14 +338,14 @@
             </div>
 
             <!-- formulario para editar categoria -->  
-            <form action="" class="w-full pb-8">
+            <form action="" id="form-edit-categoria" class="w-full pb-8">
                 <label class="mb-2 block" for="nombre">Nombre</label>
                 <div class="flex items-center space-x-4">
                     <!-- Input de texto -->
-                    <input type="text" class="h-10 flex-1 rounded-lg border border-rojo px-4 w-2/3">
+                    <input id="input-edit-categoria" type="text" class="h-10 flex-1 rounded-lg border border-rojo px-4 w-2/3">
                     <!-- Botón de submit -->
-                    <input type="submit" value="editar" class="h-10 py-2.5 px-6 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-rojo">
-                    <input type="submit" value="cancelar" class="h-10 py-2.5 px-6 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-rojo">
+                    <button type="submit" value="editar" class="h-10 py-2.5 px-6 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-rojo">Editar</button>
+                    <button type="button" id="button-cancelar-edit-categoria" value="cancelar" class="h-10 py-2.5 px-6 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-rojo">Cancelar</button>
                 </div>
             </form>
         </section>
