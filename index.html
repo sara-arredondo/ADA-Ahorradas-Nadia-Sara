@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -99,7 +99,7 @@
                    <div class="flex justify-between mb-8">
                        <h2 class="text-2xl font-bold">Filtros</h2>
                        <span>
-                           <button id="ocultar-filtros" class="text-blue-600 hover:underline">Ocultar filtros</button>
+                           <a id="ocultar-filtros" href="">Ocultar filtros</a>
                        </span>
                        
                    </div>
@@ -111,9 +111,9 @@
                        <div class="flex flex-col mb-4">
                            <label class="mb-2" for="">Tipo</label>
                            <select id="filter-type" class="h-10 rounded-lg border-rojo border px-4" name="">
-                                <option value="Todos">Todos</option>
-                                <option value="Gasto">Gasto</option>
-                                <option value="Ganancia">Ganancia</option>
+                               <option value="Todos">Todos</option>
+                               <option value="Gasto">Gasto</option>
+                               <option value="Ganancia">Ganancia</option>
                            </select>
                        </div>
    
@@ -157,21 +157,21 @@
                     <button id="agregrar-operacion-componente-button" type='button' class='py-2.5 pl-6 pr-3.5 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 flex items-center hover:bg-rojo'>Nueva Operación ></button>
                 </div>
 
-                <!-- panel cuando no hay operaciones -->
-                <div id="panel-sin-operaciones" class="h-fit hidden">
+                <!-- planel cuando no hay operaciones -->
+                <div class="h-fit hidden">
                     <div class="h-72 lg:h-96 flex justify-center mb-8">
                         <img class="h-full" src="./assets/svg/no-hay-operaciones.svg" alt="">
                     </div>
                     <div class="">
                         <h3 class="text-lg font-bold text-center">Sin operaciones</h3>
-                        <p class="text-center">Cambia los filtros o agrega operaciones</p>
+                        <p class="text-center" >Cambia los filtros o agrega operaciones</p>
                     </div>   
                 </div>
 
                 <!-- panel cuando hay operaciones operaciones -->
-                <div id="panel-con-operaciones" class="flex lg:flex-col xl:flex-col">
+                <div class="flex lg:flex-col xl:flex-col">
 
-                    <!-- titulos tabla -->
+                    <!-- titúlos tabla -->
                     <div class="hidden lg:flex text-lg font-bold">
                         <span class="w-1/5">Descripción</span>
                         <span class="w-1/5 flex justify-end">Categoría</span>
@@ -205,21 +205,20 @@
 
                     <!-- input para describir el tipo de operacion -->
                     <div class="flex flex-col mb-4">
-                        <label class="mb-2" for="name-operation">Descripción</label>
-                        <input id="name-operation" placeholder="Dale un nombre a tu operacion" type="text" required class="h-10 rounded-lg border-rojo border px-4">
+                        <label class="mb-2" for="">Descripción</label>
+                        <input id="name-operation" type="text" class="h-10 rounded-lg border-rojo border px-4">
                     </div>
 
                     <!-- input para ingresar el monto -->
                     <div class="flex flex-col mb-4">
-                        <label class="mb-2" for="quantity-operation">Monto</label>
-                        <input id="quantity-operation" type="number" placeholder="Ingresa la cantidad en números" required class="h-10 rounded-lg border-rojo border px-4">
+                        <label class="mb-2" for="">Monto</label>
+                        <input id="quantity-operation" type="number" class="h-10 rounded-lg border-rojo border px-4">
                     </div>
 
                     <!-- input para seleccionar el tipo de gasto -->
                     <div class="flex flex-col mb-4">
-                        <label class="mb-2" for="type-operation">Tipo</label>
-                        <select name=""  id="type-operation" required class="h-10 rounded-lg border-rojo border px-4">
-                            <option value="" disabled selected>Selecciona una opción</option>
+                        <label class="mb-2" for="">Tipo</label>
+                        <select name="" id="type-operation" class="h-10 rounded-lg border-rojo border px-4">
                             <option value="Gasto">Gasto</option>
                             <option value="Ganancia">Ganancia</option>
                         </select>
@@ -227,6 +226,7 @@
 
                     <!-- input para seleccionar la categoria del gasto -->
                     <div class="flex flex-col mb-4">
+
                         <label class="mb-2" for="category-operation">Categoria</label>
                         <select name="category-operation" id="category-operation" class="h-10 rounded-lg border-rojo border px-4">
                         </select>
@@ -234,8 +234,8 @@
 
                     <!-- input para ingresar la fecha-->
                     <div class="flex flex-col mb-4">
-                        <label class="mb-2" for="create-date">Fecha</label>
-                        <input id="create-date" type="date" required class="h-10 rounded-lg border-rojo border px-4">
+                        <label class="mb-2" for="">Fecha</label>
+                        <input id="create-date" type="date" class="h-10 rounded-lg border-rojo border px-4">
                     </div>
 
                     <!-- input botones-->
@@ -249,7 +249,7 @@
         </section>
 
         <!-- seccion para editar operaciones -->
-        <section id="form-edit" class="flex flex-col h-fit shadow-lg bg-amarilloClaro rounded-lg p-8 my-8 overflow-hidden hidden">
+        <section  class="flex flex-col h-fit shadow-lg bg-amarilloClaro rounded-lg p-8 my-8 overflow-hidden hidden">
 
             <!-- titulo --> 
             <div class="mb-8">
@@ -262,19 +262,19 @@
                 <!-- input para describir el tipo de operacion -->
                 <div class="flex flex-col mb-4">
                     <label class="mb-2" for="">Descripción</label>
-                    <input id="name-edit" type="text" class="h-10 rounded-lg border-rojo border px-4">
+                    <input  type="text" class="h-10 rounded-lg border-rojo border px-4">
                 </div>
 
                 <!-- input para ingresar el monto -->
                 <div class="flex flex-col mb-4">
                     <label class="mb-2" for="">Monto</label>
-                    <input id="monto-edit" type="number" class="h-10 rounded-lg border-rojo border px-4">
+                    <input type="number" class="h-10 rounded-lg border-rojo border px-4">
                 </div>
 
                 <!-- input para seleccionar el tipo de gasto -->
                 <div class="flex flex-col mb-4">
                     <label class="mb-2" for="">Tipo</label>
-                    <select name="" id="type-edit" class="h-10 rounded-lg border-rojo border px-4">
+                    <select name="" id="" class="h-10 rounded-lg border-rojo border px-4">
                         <option value="Gasto">Gasto</option>
                         <option value="Ganancia">Ganancia</option>
                     </select>
@@ -283,6 +283,7 @@
                 <!-- input para seleccionar la categoria del gasto -->
                 <div class="flex flex-col mb-4">
                     <label class="mb-2" for="">Categoria</label>
+
                     <select name="" id="edit-category-operacion" class="h-10 rounded-lg border-rojo border px-4">
                     </select>
                 </div>
@@ -290,13 +291,13 @@
                 <!-- input para ingresar la fecha-->
                 <div class="flex flex-col mb-4">
                     <label class="mb-2" for="">Fecha</label>
-                    <input id="date-edit" type="date" class="h-10 rounded-lg border-rojo border px-4">
+                    <input type="date" class="h-10 rounded-lg border-rojo border px-4">
                 </div>
 
                 <!-- input botones-->
                 <div class="flex mt-8 gap-4 justify-end">
-                    <input  type="submit" value="enviar" class='py-2.5 px-6 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500  hover:bg-rojo'>
-                    <input id="button-cancelar-edit" type="button" value="cancelar" class='py-2.5 px-6 text-sm bg-rojo text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-azul'>
+                    <input type="submit" value="enviar" class='py-2.5 px-6 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500  hover:bg-rojo'>
+                    <input type="submit" value="cancelar" class='py-2.5 px-6 text-sm bg-rojo text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-azul'>
                 </div>
 
             </form>
@@ -321,6 +322,7 @@
                     <input type="submit" value="Agregar" class="h-10 py-2.5 px-6 text-sm bg-azul text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-rojo">
                 </div>
             </form>
+
 
             <div id="list-categorias" class="flex justify-between flex-col">
             </div>
@@ -357,7 +359,7 @@
             </div>
 
             <!-- componente de reportes cuando NO hay operaciones -->
-            <section class="h-96 hidden f">
+            <section class="h-96">
 
                 <div class="h-72 flex justify-center mb-8">
                     <img class="h-full" src="./assets/svg/operaciones-insuficientes.svg" alt="">
@@ -372,7 +374,7 @@
             </section>
 
             <!-- componente de reportes cuando hay operaciones -->
-            <section class="h-fit flex-col">
+            <section class="h-fit hidden">
            
                 <!-- resumen --> 
                 <article class="mb-24">
@@ -475,7 +477,7 @@
                     </div>
                    
                     <!-- fila para reemplazar -->
-                    <div class="flex flex-row mb-6">
+                    <div id="listaTotalesPorMes" class="flex flex-row mb-6">
                         <span class="w-1/4 flex justify-start">MM/AAAA</span>
                         <span class="w-1/4 flex justify-end">Ganancias</span>
                         <span class="w-1/4 flex justify-end">Gastos</span>

@@ -31,19 +31,13 @@ const $containerButtonsMenu = $("#container-menu-buttons");
 const $formCreate = $("#form-create")
 const $buttonCancelarOperacion = $("#button-cancelar-operacion")
 
-const $formEdit = $("#form-edit")
-const $inputNameEdit = $("#name-edit")
-const $inputMontoEdit = $("#monto-edit")
-const $inputTypeEdit = $("#type-edit")
-const $inputDateEdit = $("#date-edit")
-const $buttonCancelarEdit = $("#button-cancelar-edit")
-
 const $listOperaciones = $("#list-operaciones");
 
 const $inputFilterType = $("#filter-type")
 
 const $inputFilterDate = $("#filter-date")
 const $inputFilterSort = $("#filter-sort")
+
 
 const $formCreateCategoria = $("#form-create-categoria");
 const $inputCreateCategoria = $("#create-category")
@@ -60,6 +54,7 @@ const $buttonCancelarEditCategoria = $("#button-cancelar-edit-categoria")
 const $balanceGanancia = $("#balance-ganancia")
 const $balanceGasto = $("#balance-gasto")
 const $balanceTotal = $("#balance-total")
+
 
 const $panelSinOperaciones = $("#panel-sin-operaciones")
 const $panelConOperaciones = $("#panel-con-operaciones")
@@ -107,7 +102,7 @@ $agregarOperacionButton.addEventListener("click", () => {
 
 //Boton para cancelar la creacion de una nueva operacion redirge a panel balance
 $buttonCancelarOperacion.addEventListener("click", (event) => {
-    event.preventDefault();
+    preventDefault(event);
 
     $agregarOperacionComponente.classList.add("hidden");
 
@@ -117,22 +112,10 @@ $buttonCancelarOperacion.addEventListener("click", (event) => {
 
 });
 
-$buttonCancelarEdit.addEventListener("click", (event) => {
-    event.preventDefault();
-
-    $agregarOperacionComponente.classList.add("hidden");
-
-    $balanceComponente.classList.remove("hidden");
-    $balanceComponente.classList.add("flex");
-
-    $formEdit.classList.remove("flex")
-    $formEdit.classList.add("hidden")
-})
-
 //Boton categoria
 $categoriaButton.addEventListener("click", () => {
     $categoriaComponente.classList.remove("hidden");
-    $balanceComponente.classList.add("flex"); // Asegura que se muestre correctamente
+    $balanceComponente.classList.add("flex");
 
     $agregarOperacionComponente.classList.add("hidden");
     $balanceComponente.classList.add("hidden");
@@ -149,6 +132,7 @@ $reporteButton.addEventListener("click", () => {
     $categoriaComponente.classList.add("hidden");
 })
 
+
 $ocultarFiltros.addEventListener("click", (event) => {
     event.preventDefault();
     $formFiltros.classList.toggle("hidden");// Asegura que se esconda correctamente
@@ -162,7 +146,7 @@ $ocultarFiltros.addEventListener("click", (event) => {
 })
 
 
-// ---------------------------------------------inicio codigo para atrapar datos del formulario de crear y editar ---------------------------------------------------
+// ---------------------------------------------inicio codigo para atrapar datos del formulario de crear ---------------------------------------------------
 
 
 $formCreate.addEventListener("submit", (event) => {
@@ -170,7 +154,7 @@ $formCreate.addEventListener("submit", (event) => {
 
     const nuevaOperacion = {
         id: crypto.randomUUID(),
-        name: capitalize(event.target[0].value),
+        name: event.target[0].value,
         quantity: Number(event.target[1].value),
         type: event.target[2].value,
         category: capitalize(event.target[3].value),
@@ -179,44 +163,13 @@ $formCreate.addEventListener("submit", (event) => {
     }
 
     funciones.agregarOperacion(nuevaOperacion);
-    funciones.datosTodasLasOperaciones = funciones.leerLocalStorage("operaciones");
     pintarDatos(funciones.datosTodasLasOperaciones);
 
     $agregarOperacionComponente.classList.add("hidden");
     $balanceComponente.classList.remove("hidden");
     $balanceComponente.classList.add("flex");
 
-    $formCreate.reset();
 })
-
-$formEdit.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    //const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
-    //const operacionBuscada = operacionesActualizadas.find(element => element.id === event.target.id)
-
-    const operacionBuscada = $formEdit.id;
-
-    const nuevosDatos = {
-        name: event.target[0].value,
-        quantity: Number(event.target[1].value),
-        type: event.target[2].value,
-        category: event.target[3].value,
-        date: dayjs(event.target[4].value, "YYYY-MM-DD").format("DD-MM-YYYY"),
-    };
-
-    const datosModificados =  funciones.editarOperacion(operacionBuscada, nuevosDatos);
-    pintarDatos(datosModificados);
-
-    $agregarOperacionComponente.classList.add("hidden");
-    
-    $balanceComponente.classList.remove("hidden");
-    $balanceComponente.classList.add("flex");
-
-    $formEdit.classList.remove("flex")
-    $formEdit.classList.add("hidden")
-
-}); 
 
 function actualizarBalance(operaciones) {
     let totalGanancia = 0;
@@ -238,10 +191,6 @@ function actualizarBalance(operaciones) {
     $balanceTotal.textContent = totalBalance >= 0 ? `+${totalBalance}` : `${totalBalance}`;
 }
 
-function capitalize(str) {
-    if (!str) return "";
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
 
 // ---------------------------------------------inicio codigo para filtrar ---------------------------------------------------
 
@@ -484,21 +433,10 @@ function actualizarCategoriasFormCreateEditFilter(categorias) {
 
 // ---------------------------------------------inicio codigo para pintar datos ---------------------------------------------------
 
+
 function pintarDatos(arrayOperaciones) {
 
     $listOperaciones.innerHTML = "";
-
-    actualizarBalance(arrayOperaciones);
-
-    if (arrayOperaciones.length === 0) {
-        $panelSinOperaciones.classList.remove("hidden");
-        $panelConOperaciones.classList.add("hidden");
-        return; // Sale de la función sin pintar ninguna operación
-    } else {
-        // Si hay operaciones, asegúrate de ocultar el panel
-        $panelSinOperaciones.classList.add("hidden");
-        $panelConOperaciones.classList.remove("hidden");
-    }
 
     for (const operacion of arrayOperaciones) {
 
@@ -528,50 +466,267 @@ function pintarDatos(arrayOperaciones) {
     }
 
 
-    const $$arrayButtonsEdit = $$(".button-edit")
-    const $$arraybuttonsDelete = $$(".button-delete")
-
-
-    function editarEliminarOperaciones() {
-        $$arraybuttonsDelete.forEach(button => {
-            button.addEventListener("click", (event) => {
-                console.log("holaaaaaa")
-                const idEliminar = event.target.id;
-                funciones.eliminarOperacion(idEliminar); 
-    
-                const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
-                pintarDatos(operacionesActualizadas);
-            });
-        });
-    
-        $$arrayButtonsEdit.forEach(button => {
-            button.addEventListener("click", (event)=> {
-                console.log("chauuuuuu")
-                $balanceComponente.classList.remove("flex")
-                $balanceComponente.classList.add("hidden")
-                
-                $formEdit.classList.remove("hidden")
-    
-                const operacionesActualizadas = funciones.leerLocalStorage("operaciones");
-                const operacionBuscada = operacionesActualizadas.find(element => element.id === event.target.id)
-
-                $inputNameEdit.value = operacionBuscada.name
-                $inputMontoEdit.value = operacionBuscada.quantity
-                $inputTypeEdit.value = operacionBuscada.type
-                $inputDateEdit.value = dayjs(operacionBuscada.date,"DD-MM-YYYY").format("YYYY-MM-DD")
-                
-                $formEdit.id = operacionBuscada.id
-            })
-        })
-    }
-
-   
-    editarEliminarOperaciones()
-
     actualizarBalance(arrayOperaciones);
+}
 
+
+
+
+//-----------------------Actualizar Reporte--------------------------------//
+
+
+
+//---monto mes mayor gasto----//
+
+const gastosPorMes = funciones.datosTodasLasOperaciones.reduce((acc, operacion) => {
+    const mesAnio = dayjs(operacion.datze, "YYYY-MM-DD").format("DD-MM-YYYY");
+    if (!acc[mesAnio]) {
+        acc[mesAnio] = 0;
+
+
+    }
+    acc[mesAnio] += operacion.quantity;
+
+    return acc;
+}, {});
+
+const mesMayorGasto = Object.keys(gastosPorMes).reduce((maxMes, mesActual) => {
+    if (gastosPorMes[mesActual] > gastosPorMes[maxMes]) {
+        return mesActual;
+    }
+    return maxMes;
+});
+
+//----------------------//
+
+const actualizarReportes = () => {
+    const datos = funciones.leerLocalStorage("operaciones")
+
+    //-- Categoria con mayor ganancia- y su monto-//
+    const Ganancia = funciones.filtrarPorTipo("Ganancia");
+    const totalGanancia = Ganancia.reduce((acc, curr) => acc + curr.quantity, 0)
+    const categoriasGanancia = Ganancia.reduce((acc, curr) => {
+        if (!acc[curr.category]) {
+            acc[curr.category] = 0;
+        }
+        acc[curr.category] += curr.quantity;
+        return acc;
+    }, {});
+    const categoriaMayorGanancia = Object.keys(categoriasGanancia).reduce((maxCategory, currentCategory) => {
+        if (categoriasGanancia[currentCategory] > categoriasGanancia[maxCategory]) {
+            return currentCategory;
+        }
+        return maxCategory;
+    });
+
+    const montoMayorGanancia = categoriasGanancia[categoriaMayorGanancia];
+
+    //-- mes con mas  Gasto en Reporte-//
+    const Gasto = funciones.filtrarPorTipo("Gasto");
+    const totalGasto = Gasto.reduce((acc, curr) => acc + curr.quantity, 0)
+    const categoriasGasto = Gasto.reduce((acc, curr) => {
+        if (!acc[curr.category]) {
+            acc[curr.category] = 0;
+        }
+        acc[curr.category] += curr.quantity;
+        return acc;
+    }, {});
+    //----categoria con mayor gasto y su monto---//
+
+    const categoriaMayorGasto = Object.keys(categoriasGasto).reduce((maxCategory, currentCategory) => {
+
+        if (categoriasGasto[currentCategory] > categoriasGasto[maxCategory]) {
+            return currentCategory;
+        }
+        return maxCategory;
+    });
+
+    const montoMayorGasto = categoriasGasto[categoriaMayorGasto];
+
+    //---balance por categoria--en Reporte//
+
+    const totalBalance = totalGanancia - totalGasto
+
+    const balances = Object.keys(categoriasGanancia).reduce((acc, category) => {
+
+        const ganancia = categoriasGanancia[category] || 0;
+        const gasto = categoriasGasto[category] || 0;
+        acc[category] = ganancia - gasto;
+        return acc;
+    }, {});
+    const categoriaMayorBalance = Object.keys(balances).reduce((maxCategory, currentCategory) => {
+        if (balances[currentCategory] > balances[maxCategory]) {
+            return currentCategory; // 
+        }
+        return maxCategory;
+    });
+
+    const mayorBalance = balances[categoriaMayorBalance];
+
+    const gananciasPorMes = Ganancia.reduce((acc, curr) => {
+        const mes = dayjs(curr.date, "DD-MM-YYYY").format("MM-YYYY");
+        if (!acc[mes]) {
+            acc[mes] = 0;
+        }
+        acc[mes] += curr.quantity;
+        return acc;
+    }, {});
+
+
+    // mes con mayor  ganancia- en Reporte--//
+    const operaciones = [];
+    Ganancia.filter(op => op.type === "Ganancia").forEach(op => {
+
+        const mes = dayjs(op.date, "DD-MM-YYYY").format("YYYY-MM");
+
+        if (!gananciasPorMes[mes]) {
+            gananciasPorMes[mes] = 0;
+        }
+        gananciasPorMes[mes] += op.quantity;
+    });
+    // Mostrar el mes con la mayor ganancia en Reporte---//
+    const GANANCIASMESES = {};
+    operaciones.filter(op => op.type === "Ganancia").forEach(op => {
+        const mes = dayjs(op.date, "DD-MM-YYYY").format("YYYY-MM");
+        if (!GANANCIASMESES[mes]) {
+            GANANCIASMESES[mes] = 0;
+        }
+
+        GANANCIASMESES[mes] += op.quantity;
+    });
+
+
+    const mesConMayorGanancia = Object.entries(GANANCIASMESES).reduce((acc, [mes, ganancia]) => {
+        return ganancia > acc.ganancia ? { mes, ganancia } : acc;
+    }, { mes: "", ganancia: 0 });
+
+
+    const mesFormateado = dayjs(mesConMayorGanancia.mes + "-01", "YYYY-MM-DD").format("DD/MM/YYYY");
+
+
+
+
+    //---------Pintar ---Reporte----------------//
+
+    $reporteComponente.innerHTML = `<!-- componente de reportes cuando hay operaciones -->
+ <section class="h-fit ">
+ <!-- resumen --> 
+     <article class="mb-24">
+
+         <!-- título resumen --> 
+         <div class="mb-8">
+             <h2 class="text-2xl font-bold">
+             Reporte</h2>
+         </div>
+
+         <!-- categoria con mayor ganancia -->
+         <div class="flex flex-rom justify-between mb-4">
+             <p class="w-1/2 font-bold">Categoria con mayor ganancia</p>
+             <div class="w-1/4 flex justify-end">
+                 <span class="border border-azul p-2 rounded-full text-xs">${categoriaMayorGanancia}</span>
+             </div>
+             <span class="w-1/4 flex justify-end text-green-500">${montoMayorGanancia}</span>
+         </div>
+     
+         <!-- categoria con mayor gasto -->
+         <div class="flex flex-rom justify-between mb-4">
+             <p class="w-1/2 font-bold">Categoria con mayor gasto</p>
+             <div class="w-1/4 flex justify-end">
+                 <span class="border border-azul p-2 rounded-full text-xs">${categoriaMayorGasto}</span>
+             </div>         
+             <span class="w-1/4 flex justify-end text-red-500">${montoMayorGasto}</span>
+         </div>
+
+         <!-- categoria con mayor balance -->
+         <div class="flex flex-rom justify-between mb-4">
+             <p class="w-1/2 font-bold">Categoria con mayor balance </p>
+             <div class="w-1/4 flex justify-end">
+                 <span class="border border-azul p-2 rounded-full text-xs">${categoriaMayorBalance}</span>
+             </div>  
+             <span class="w-1/4 flex justify-end">${mayorBalance}</span>
+         </div>
+        
+         <!-- mes con mayor ganancia -->
+         <div class="flex flex-rom justify-between mb-4">
+             <p class="w-1/2 font-bold">Mes con mayor ganancia</p>
+             <div class="w-1/4 flex justify-end">
+                 <span>${mesFormateado}</span>
+             </div>
+             <span class="w-1/4 flex justify-end"></span>
+         </div>
+    
+         <!-- mes con mayor gasto -->
+         <div class="flex flex-rom justify-between mb-4">
+             <p class="w-1/2 font-bold">Mes con mayor gasto</p>
+             <div class="w-1/4 flex justify-end">
+                 <span>DD/MM/AAAA</span>
+             </div>
+             <span class="w-1/4 flex justify-end">${gastosPorMes[mesMayorGasto]}</span>
+         </div>
+     
+     </article>
+     
+     <!-- totales por categoria --> 
+     <article class="mb-16">
+
+         <!-- título Por categorias --> 
+         <div class="mb-8">
+             <h2 class="text-2xl font-bold">Totales por categoria</h2>
+         </div>
+
+         <!-- títulos columnas -->
+         
+         <div class="flex flex-row mb-4">
+             <span class="w-1/4 flex justify-start font-bold"></span>
+             <span class="w-1/4 flex justify-end font-bold ">Ganancias</span>
+             <span class="w-1/4 flex justify-end font-bold">Gastos</span>
+             <span class="w-1/4 flex justify-end font-bold">Balance</span>
+         </div>
+        
+         <!-- fila para reemplazar -->
+         <div class="flex flex-row mb-6">
+             <div class="w-1/4 flex justify-start">
+                 <span class="border border-azul p-2 rounded-full text-xs">trabajo</span>
+             </div>
+             <span class="w-1/4 flex justify-end text-green-500">${totalGanancia}</span>
+             <span class="w-1/4 flex justify-end text-red-500">${totalGasto}</span>
+             <span class="w-1/4 flex justify-end">${totalBalance}</span>
+         </div>
+
+     </article>    
+ 
+     <!-- totales por mes --> 
+     <article class="mb-16">
+
+         <!-- título Por mes --> 
+         <div class="mb-8">
+             <h2 class="text-2xl font-bold">Totales por mes</h2>
+         </div>
+
+         <!-- títulos columnas -->
+         <div class="flex flex-row mb-4">
+             <span class="w-1/4 flex justify-start font-bold">Mes</span>
+             <span class="w-1/4 flex justify-end font-bold">Ganancias</span>
+             <span class="w-1/4 flex justify-end font-bold">Gastos</span>
+             <span class="w-1/4 flex justify-end font-bold">Balance</span>
+         </div>
+        
+         <!-- fila para reemplazar -->
+         <div class="flex flex-row mb-6">
+             <span class="w-1/4 flex justify-start">${mesFormateado}</span>
+             <span class="w-1/4 flex justify-end"></span>
+             <span class="w-1/4 flex justify-end">Gastos</span>
+             <span class="w-1/4 flex justify-end">Balance</span>
+         </div>
+
+     </article>
+     
+ </section>
+
+</section>`
 
 }
+
 
 window.onload = () => {
     funciones.datosTodasLasOperaciones = funciones.leerLocalStorage("operaciones");
