@@ -64,6 +64,8 @@ const $balanceTotal = $("#balance-total")
 const $panelSinOperaciones = $("#panel-sin-operaciones")
 const $panelConOperaciones = $("#panel-con-operaciones")
 
+const $reporteConOperaciones = $("#reporte-componente-con-operaciones")
+
 
 // ---------------------------------------------inicio codigo para ocultar menu hamburguesa mobile y cambio de icono  ---------------------------------------------------
 
@@ -321,6 +323,7 @@ $inputFilterCategory.addEventListener("input", (event) => {
 
 const categoriasPredeterminadas = ["Trabajo", "Educación", "Transporte", "Comida", "Salida"];
 
+
 $formCreateCategoria.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -482,7 +485,123 @@ function actualizarCategoriasFormCreateEditFilter(categorias) {
 }
 
 
-// ---------------------------------------------inicio codigo para pintar datos ---------------------------------------------------
+
+function pintarReporte() {
+    
+    $reporteConOperaciones.innerHTML = `
+
+        <article  class="mb-24">
+
+                    <!-- título resumen --> 
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold">Resumen</h2>
+                    </div>
+
+                    <!-- categoria con mayor ganancia -->
+                    <div class="flex flex-rom justify-between mb-4">
+                        <p class="w-1/2 font-bold">Categoria con mayor ganancia</p>
+                        <div class="w-1/4 flex justify-end">
+                            <span class="border border-azul p-2 rounded-full text-xs">trabajo</span>
+                        </div>
+                        <span class="w-1/4 flex justify-end">+$XXXX</span>
+                    </div>
+                
+                    <!-- categoria con mayor gasto -->
+                    <div class="flex flex-rom justify-between mb-4">
+                        <p class="w-1/2 font-bold">Categoria con menor ganancia</p>
+                        <div class="w-1/4 flex justify-end">
+                            <span class="border border-azul p-2 rounded-full text-xs">trabajo</span>
+                        </div>         
+                        <span class="w-1/4 flex justify-end">+$XXXX</span>
+                    </div>
+
+                    <!-- categoria con mayor balance -->
+                    <div class="flex flex-rom justify-between mb-4">
+                        <p class="w-1/2 font-bold">Categoria con mayor balance </p>
+                        <div class="w-1/4 flex justify-end">
+                            <span class="border border-azul p-2 rounded-full text-xs">trabajo</span>
+                        </div>  
+                        <span class="w-1/4 flex justify-end">+$XXXX</span>
+                    </div>
+                   
+                    <!-- mes con mayor ganancia -->
+                    <div class="flex flex-rom justify-between mb-4">
+                        <p class="w-1/2 font-bold">Mes con mayor ganancia</p>
+                        <div class="w-1/4 flex justify-end">
+                            <span>DD/MM/AAAA</span>
+                        </div>
+                        <span class="w-1/4 flex justify-end">+$XXXX</span>
+                    </div>
+               
+                    <!-- mes con mayor gasto -->
+                    <div class="flex flex-rom justify-between mb-4">
+                        <p class="w-1/2 font-bold">Mes con mayor gasto</p>
+                        <div class="w-1/4 flex justify-end">
+                            <span>DD/MM/AAAA</span>
+                        </div>
+                        <span class="w-1/4 flex justify-end">+$XXXX</span>
+                    </div>
+                
+                </article>
+                
+                <!-- totales por categoria --> 
+                <article class="mb-16">
+
+                    <!-- título Por categorias --> 
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold">Totales por categoria</h2>
+                    </div>
+
+                    <!-- títulos columnas -->
+                    
+                    <div class="flex flex-row mb-4">
+                        <span class="w-1/4 flex justify-start font-bold">Categoria</span>
+                        <span class="w-1/4 flex justify-end font-bold">Ganancias</span>
+                        <span class="w-1/4 flex justify-end font-bold">Gastos</span>
+                        <span class="w-1/4 flex justify-end font-bold">Balance</span>
+                    </div>
+                   
+                    <!-- fila para reemplazar -->
+                    <div class="flex flex-row mb-6">
+                        <div class="w-1/4 flex justify-start">
+                            <span class="border border-azul p-2 rounded-full text-xs">trabajo</span>
+                        </div>
+                        <span class="w-1/4 flex justify-end">Ganancias</span>
+                        <span class="w-1/4 flex justify-end">Gastos</span>
+                        <span class="w-1/4 flex justify-end">Balance</span>
+                    </div>
+
+                </article>    
+            
+                <!-- totales por mes --> 
+                <article class="mb-16">
+
+                    <!-- título Por mes --> 
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold">Totales por mes</h2>
+                    </div>
+
+                    <!-- títulos columnas -->
+                    <div class="flex flex-row mb-4">
+                        <span class="w-1/4 flex justify-start font-bold">Mes</span>
+                        <span class="w-1/4 flex justify-end font-bold">Ganancias</span>
+                        <span class="w-1/4 flex justify-end font-bold">Gastos</span>
+                        <span class="w-1/4 flex justify-end font-bold">Balance</span>
+                    </div>
+                   
+                    <!-- fila para reemplazar -->
+                    <div class="flex flex-row mb-6">
+                        <span class="w-1/4 flex justify-start">MM/AAAA</span>
+                        <span class="w-1/4 flex justify-end">Ganancias</span>
+                        <span class="w-1/4 flex justify-end">Gastos</span>
+                        <span class="w-1/4 flex justify-end">Balance</span>
+                    </div>
+
+                </article>
+     
+     `
+    
+}
 
 function pintarDatos(arrayOperaciones) {
 
@@ -581,5 +700,6 @@ window.onload = () => {
     actualizarCategoriasFormCreateEditFilter(funciones.obtenerCategorias(categoriasPredeterminadas));  
     cargarCategorias()
     menuHamburguesa()
+    pintarReporte() 
     
 }

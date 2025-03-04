@@ -87,6 +87,8 @@ function editarCategoria(index, nuevoNombre, categoriasPredeterminadas) {
 
 }
 
+
+
 // ---------------------------------------------inicio funcion para exportar datos ---------------------------------------------------
 
 
