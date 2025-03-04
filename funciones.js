@@ -48,7 +48,6 @@ function editarOperacion (idOperacion, nuevosDatos){
 
 function obtenerCategorias(categoriasPredeterminadas) {
     let categoriasGuardadas = JSON.parse(localStorage.getItem("categorias")) || [];
-
     if (categoriasGuardadas.length === 0) {
         categoriasGuardadas = [...categoriasPredeterminadas];
         localStorage.setItem("categorias", JSON.stringify(categoriasGuardadas));
