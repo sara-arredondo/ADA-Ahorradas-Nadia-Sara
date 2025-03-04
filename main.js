@@ -788,6 +788,5 @@ window.onload = () => {
     actualizarCategoriasFormCreateEditFilter(funciones.obtenerCategorias(categoriasPredeterminadas));  
     cargarCategorias()
     menuHamburguesa()
-    pintarReporte() 
-    
+    pintarReporte()  
 }
