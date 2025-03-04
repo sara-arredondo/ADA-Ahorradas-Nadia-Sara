@@ -485,7 +485,6 @@ function actualizarCategoriasFormCreateEditFilter(categorias) {
 }
 
 
-
 function pintarReporte() {
     
     $reporteConOperaciones.innerHTML = `
